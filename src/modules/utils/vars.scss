@@ -1,0 +1,13 @@
+$background-color: #efefec;
+
+$main-light-color: #fff;
+$main-accent-color: #04b784;
+$main-accent-color-light: #05d398;
+
+@mixin transition-primary {
+  transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -ms-transition: all 0.4s;
+  -o-transition: all 0.4s;
+}

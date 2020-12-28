@@ -1,0 +1,30 @@
+.header{
+  background-color: $main-light-color;
+  box-shadow: 0 2px 9px rgba(0,0,0,.13);
+
+  &__inner{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 98px;
+  }
+
+  &__logo{
+    display: flex;
+    align-items: center;
+
+    &-img{
+      width: 54px;
+      height: 54px;
+      margin-right: 18px;
+      border-radius: 11px;
+      box-shadow: 2px 2px 9px rgba(0,0,0,.13);
+    }
+
+    &-title{
+      width: 137px;
+      height: 25px;
+    }
+  }
+  
+}
