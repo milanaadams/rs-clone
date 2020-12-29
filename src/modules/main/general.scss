@@ -4,8 +4,21 @@
   padding: 0;
 }
 
+body{
+  font-family: $main-font;
+  color: #64635f;
+  font-weight: 400;
+}
+
 .container {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 55px;
+}
+
+h2{
+  font-family: $main-font;
+  font-size: 36px;
+  font-weight: 500;
+  color: $title-text;
 }

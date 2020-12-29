@@ -1,13 +1,18 @@
 $background-color: #efefec;
+$input-bg-color: rgb(255, 255, 255);
+$input-bg-color--active: rgb(247, 248, 250);
 
 $main-light-color: #fff;
 $main-accent-color: #04b784;
 $main-accent-color-light: #05d398;
 
+$main-text-color: #64635f;
+$title-text: #5f6160;
+
+$border-input-color: #dedcdc;
+
 @mixin transition-primary {
   transition: all 0.4s;
-  -webkit-transition: all 0.4s;
-  -moz-transition: all 0.4s;
-  -ms-transition: all 0.4s;
-  -o-transition: all 0.4s;
 }
+
+$main-font: 'Roboto', sans-serif;

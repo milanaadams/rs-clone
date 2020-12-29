@@ -9,9 +9,13 @@
 }
 
 .main{
-  min-height: calc(100vh - 98px - 70px);
   &__inner{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     padding: 40px 0;
+    min-height: calc(100vh - 98px - 70px);
   }
 }
 

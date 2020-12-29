@@ -1,9 +1,10 @@
 import create from '../utils/create';
 import '../utils/assets';
+import Login from '../login/login';
 
 export default class Main {
   constructor() {
-    this.elements = [];
+    this.elements = {};
     this.generateLayout();
   }
 
@@ -26,11 +27,21 @@ export default class Main {
     this.elements.footer = create('footer', 'footer', null, document.body);
     const footerContainer = create('div', 'container', null, this.elements.footer);
     this.elements.footerInner = create('div', 'footer__inner', null, footerContainer);
-    create('p', 'footer__year', '©2021', this.elements.footerInner)
+    create('p', 'footer__year', '©2021', this.elements.footerInner);
     const footerCourseLink = create('a', 'footer__course-link', null, this.elements.footerInner, ['href', 'https://rs.school/js/'], ['target', '_blank']);
     footerCourseLink.innerHTML = '<img src="assets/rs-school-js.svg" style = "width: 60px; height: auto" alt="RS School logo">';
     const footerAuthorsInfo = create('div', 'footer__authors-info', null, this.elements.footerInner);
     const authorsInfo = ['f19m', 'milanaadams'];
     authorsInfo.forEach((name) => { create('a', 'footer__authors-link', name, footerAuthorsInfo, ['href', `https://github.com/${name}`], ['target', '_blank']); });
+
+    this.loadContent();
+  }
+
+  loadContent() {
+    // check if user is authorized - load his dashboard;
+    // if not authorized - load login form;
+
+    // Loading only login form until I figure out how to register new users and login existing ones
+    this.loginForm = new Login(this.elements.mainInner);
   }
 }
