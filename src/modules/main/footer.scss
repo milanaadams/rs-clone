@@ -1,0 +1,29 @@
+.footer{
+  background-color: $main-light-color;
+  box-shadow: 0 -2px 9px rgba(0,0,0,.13);
+
+  &__inner{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+  }
+
+  &__course-link{
+    margin: 0 10px;
+  }
+
+  &__authors-link{
+    margin: 0 10px;
+    color: $main-accent-color;
+    text-decoration: none;
+    @include transition-primary;
+    &:hover{
+      color: $main-accent-color-light;
+      text-decoration: underline;
+    }
+    &:last-child{
+      margin-right: 0;
+    }
+  }
+}

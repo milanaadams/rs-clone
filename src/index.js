@@ -1,1 +1,5 @@
-console.log(1);
+import Main from './modules/main/main';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const app = new Main();
+});
