@@ -74,17 +74,14 @@
 .error{
   position: absolute;
   width: 100%;
-  top: 0;
   bottom: 0;
   left: 0;
-  right: 0;
   &-icon{
     width: 29px;
     height: auto;
     content: '';
     position: absolute;
-    top: 0;
-    bottom: 0;
+    bottom: 30px;
     margin: auto;
     right: 28px;
   }
@@ -110,6 +107,9 @@
   cursor: pointer;
   @include transition-primary;
   &:hover{
+    background-color: $main-accent-color-light;
+  }
+  &:focus{
     background-color: $main-accent-color-light;
   }
 }

@@ -42,6 +42,6 @@ export default class Main {
     // if not authorized - load login form;
 
     // Loading only login form until I figure out how to register new users and login existing ones
-    this.loginForm = new Login(this.elements.mainInner);
+    this.loginForm = new Login(this.elements.mainInner, true);
   }
 }
