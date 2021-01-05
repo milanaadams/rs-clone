@@ -1,9 +1,12 @@
 import create from '../utils/create';
 import '../utils/assets';
 import Login from '../login/login';
+import DataModel from '../data-model/dataModel';
+import UserDashboard from '../user-dashboard/userDashboard';
 
 export default class Main {
   constructor() {
+    this.userToken = localStorage.getItem('userToken');
     this.elements = {};
     this.generateLayout();
   }
@@ -38,10 +41,33 @@ export default class Main {
   }
 
   loadContent() {
-    // check if user is authorized - load his dashboard;
-    // if not authorized - load login form;
+    if (this.userToken) {
+      fetch('https://f19m-rsclone-back.herokuapp.com/api/user/getInfo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.userToken}`,
+        },
+      })
+        .then((response) => {
+          if (response.status !== 200) {
+            this.userToken = null;
+            this.loadLoginForm();
+          } else {
+            response.json().then((data) => {
+              this.dataModel = new DataModel(data);
+              this.userDashboard = new UserDashboard(this.elements.mainInner,
+                this.elements.headerRight, this.dataModel);
+            });
+          }
+        })
+        .catch((errMsg) => { throw new Error(errMsg); });
+    }
 
-    // Loading only login form until I figure out how to register new users and login existing ones
-    this.loginForm = new Login(this.elements.mainInner);
+    if (!this.userToken) this.loadLoginForm();
+  }
+
+  loadLoginForm() {
+    this.loginForm = new Login(this.elements.mainInner, true);
   }
 }
