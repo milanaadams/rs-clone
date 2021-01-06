@@ -1,8 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import create from '../utils/create';
+import Abstract from '../abstract/abstract';
 
-export default class Login {
+export default class Login extends Abstract {
   constructor(parent) {
+    super();
     this.parent = parent;
     this.login = true;
     this.elements = {};
@@ -89,12 +91,13 @@ export default class Login {
       }),
     })
       .then((response) => response.json().then((data) => {
-        console.log(data);
         while (this.elements.errorMessage.children.length > 0) {
           this.elements.errorMessage.children[0].remove();
         }
         if (response.status === 200) {
           localStorage.setItem('userToken', data.token);
+          this.token = data.token;
+          this.createCustomEvent('userLoggedIn');
         }
         if (response.status === 400) {
           create('p', null, data.error, this.elements.errorMessage);
@@ -116,7 +119,6 @@ export default class Login {
       }),
     })
       .then((response) => response.json().then((data) => {
-        console.log(data);
         if (response.status === 200) {
           this.showRegisteredSuccessfullyMsg();
         } else {
@@ -133,5 +135,11 @@ export default class Login {
       this.login = true;
       this.switchForm();
     }, 3000);
+  }
+
+  catchEvent(eventName) {
+    if (this.evtArr.indexOf(eventName) === -1) {
+      throw new Error('Wrong custom event name.');
+    }
   }
 }

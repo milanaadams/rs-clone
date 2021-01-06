@@ -26,5 +26,87 @@
       height: 25px;
     }
   }
+
+  &__right{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__username{
+    position: relative;
+    cursor: pointer;
+    color: $main-text-color;
+    &::after {
+      content: "";
+      width: 0;
+      height: 1px;
+      background: $main-text-color;
+      left: 0px;
+      bottom: -2px;
+      position: absolute;
+      transition: 0.6s ease;
+    }
+
+  }
+
+  &__user-icon{
+    width: 34px;
+    height: 34px;
+    margin-left: 18px;
+    background-image: url('assets/username-icon.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    @include transition-primary;
+  }
+
+  &__right{
+    position: relative;
+    &:hover{
+      .header__username{
+        &::after{
+          width: 100%;
+        }
+      }
+      .header__user-icon{
+        background-image: url('assets/user-colored-icon.png');
+      }
+    }
+  }
+
+  &__dropdown{
+    display: none;;
+    position: absolute;
+    top: 55px;
+    right: -13px;
+    z-index: 100;
+    min-width: 207px;
+    max-width: 400px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: #fff;
+    box-shadow: 2px 2px 9px rgba(0,0,0,.13);
+    &-menu{
+      list-style-type: none;
+      li{
+        padding: 0 15px;
+        font-size: 15px;
+        line-height: 40px;
+        border-bottom: 1px solid $border-input-color;
+        @include transition-primary;
+        &:last-child{
+          border-bottom: none;
+        }
+        &:hover{
+          background-color: $background-color;
+        }
+      }
+    }
+    &--active{
+      display: block;
+    }
+  }
   
 }
