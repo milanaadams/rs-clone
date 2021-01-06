@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
-export default class abstract {
+export default class Abstract {
   constructor() {
-    this.evtArr = ['switchLoginForm'];
+    this.evtArr = ['userLoggedIn', 'logOut'];
 
     this.evtArr.forEach((evtName) => {
       document.addEventListener(evtName, (evt) => this.catchEvent(evtName, evt.detail));

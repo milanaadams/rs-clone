@@ -1,12 +1,14 @@
 import create from '../utils/create';
+import Abstract from '../abstract/abstract';
 import '../utils/assets';
 import Login from '../login/login';
 import DataModel from '../data-model/dataModel';
 import UserDashboard from '../user-dashboard/userDashboard';
 
-export default class Main {
+export default class Main extends Abstract {
   constructor() {
-    this.userToken = localStorage.getItem('userToken');
+    super();
+    this.userToken = null;
     this.elements = {};
     this.generateLayout();
   }
@@ -41,6 +43,10 @@ export default class Main {
   }
 
   loadContent() {
+    while (this.elements.mainInner.children.length > 0) {
+      this.elements.mainInner.children[0].remove();
+    }
+    this.userToken = localStorage.getItem('userToken');
     if (this.userToken) {
       fetch('https://f19m-rsclone-back.herokuapp.com/api/user/getInfo', {
         method: 'POST',
@@ -52,6 +58,7 @@ export default class Main {
         .then((response) => {
           if (response.status !== 200) {
             this.userToken = null;
+            localStorage.removeItem('userToken');
             this.loadLoginForm();
           } else {
             response.json().then((data) => {
@@ -69,5 +76,16 @@ export default class Main {
 
   loadLoginForm() {
     this.loginForm = new Login(this.elements.mainInner, true);
+  }
+
+  logOut() {
+    this.userToken = null;
+    localStorage.removeItem('userToken');
+    this.loadContent();
+  }
+
+  catchEvent(eventName) {
+    if (eventName.match(/userLoggedIn/)) this.loadContent();
+    if (eventName.match(/logOut/)) this.logOut();
   }
 }
