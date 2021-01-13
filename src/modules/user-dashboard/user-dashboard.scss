@@ -1,0 +1,15 @@
+.dashboard{
+  display: flex;
+  justify-content: space-between;
+  min-height: calc(100vh - 98px - 70px - 80px);
+
+  &__left{
+    width: 540px;
+    min-width: 48%;
+  }
+
+  &__right{
+    width: 48%;
+    background-color: brown;
+  }
+}

@@ -13,13 +13,14 @@ export default class Login extends Abstract {
 
   generateForm() {
     this.elements.login = create('div', 'login', null, this.parent);
-    this.elements.title = create('h2', 'login__title', null, this.elements.login);
-    this.elements.form = create('form', 'login__form', null, this.elements.login);
+    this.elements.loginInner = create('div', 'login__inner', null, this.elements.login);
+    this.elements.title = create('h2', 'login__title', null, this.elements.loginInner);
+    this.elements.form = create('form', 'login__form', null, this.elements.loginInner);
     const formItemName = create('div', 'login__form-item', null, this.elements.form);
     const formItemEmail = create('div', 'login__form-item', null, this.elements.form);
     const formItemPass = create('div', 'login__form-item', null, this.elements.form);
     const formItemBtn = create('div', 'login__form-item', null, this.elements.form);
-    const loginMeta = create('div', 'login__form-meta', null, this.elements.login);
+    const loginMeta = create('div', 'login__form-meta', null, this.elements.loginInner);
 
     if (this.login) this.elements.title.textContent = 'Login';
     else this.elements.title.textContent = 'Register';

@@ -10,6 +10,10 @@ body{
   font-weight: 400;
 }
 
+.lock{
+  overflow: hidden;
+}
+
 .container {
   max-width: 1280px;
   margin: 0 auto;
@@ -21,4 +25,14 @@ h2{
   font-size: 36px;
   font-weight: 500;
   color: $title-text;
+}
+
+.blackout{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 9;
 }
