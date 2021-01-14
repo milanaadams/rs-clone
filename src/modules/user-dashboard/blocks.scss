@@ -1,0 +1,112 @@
+.block{
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 2px 2px 9px rgba(0,0,0,.13);
+  margin-bottom: 30px;
+  position: relative;
+  width: 100%;
+
+  &__head{
+    display: flex;
+    justify-content: space-between;
+    max-height: 140px;
+    padding: 20px;
+    font-weight: 400;
+    font-size: 20px;
+    border-bottom: 1px solid #e8e7e7;
+    background-color: rgba(244,244,241,.4);
+  }
+
+  &__stats{
+    display: flex;
+    &-item{
+      width: 135px;
+      margin-left: 10px;
+      text-align: right;
+    }
+  }
+
+  &__name{
+    font-size: 20px;
+    text-transform: uppercase;
+    color: $block-title-text
+  }
+
+  &__subtitle{
+    margin-top: 5px;
+    color: $block-subtitle-text;
+    text-transform: lowercase;
+    font-size: 12px;
+    &--centered{
+      display: block;
+      text-align: center;
+    }
+  }
+
+  &__body{
+    padding: 15px 17px 0;
+  }
+
+  &__categories{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    &-item{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 120px;
+      margin: 0 3px 15px;
+    }
+    &-title{
+      line-height: 38px;
+      color: $categories-title;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    &-img{
+      margin: 10px 0;
+      width: 60px;
+      height: 60px;
+      overflow: hidden;
+      border-radius: 50%;
+      background-color: $income-bg-color;
+      cursor: pointer;
+      @include transition-primary;
+      &:hover {
+        opacity: 0.9;
+      }
+      &--add{
+        background-color: transparent;
+        border: 2px solid #c1c5c9;
+        i{
+          color: #c1c5c9;
+        }
+        &:hover {
+          opacity: 0.7;
+      }
+      }
+    }
+
+    &-amount{
+      height: 40px;
+      &-actual{
+        line-height: 16px;
+        font-weight: 500;
+        font-size: 16px;
+        color: $income-bg-color;
+      }
+    }
+
+    &-icon{
+      width: 100%;
+      line-height: 60px;
+      text-align: center;
+      color: #fff;
+      font-size: 32px;
+    }
+  }
+}

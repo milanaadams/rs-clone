@@ -1,5 +1,11 @@
 .login{
-  width: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 98px - 70px - 80px);
+  &__inner{
+    width: 450px;
+  }
   &__title{
     text-align: center;
     margin-bottom: 40px;
@@ -122,6 +128,9 @@
 }
 
 .registration-success{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: $main-font;
   font-size: 38px;
   font-weight: 500;

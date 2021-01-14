@@ -1,6 +1,7 @@
 import create from '../utils/create';
 import removeChildren from '../utils/removeAllChildren';
 import Abstract from '../abstract/abstract';
+import Categories from '../categories/categories';
 
 export default class UserDashboard extends Abstract {
   constructor(parent, headerInfo, dataModel) {
@@ -9,8 +10,8 @@ export default class UserDashboard extends Abstract {
     this.elements = {};
     this.headerInfo = headerInfo;
     this.dataModel = dataModel;
-    create('div', null, 'user dashboard', this.parent);
     this.loadHeaderInfo();
+    this.loadDashboard();
   }
 
   loadHeaderInfo() {
@@ -35,6 +36,13 @@ export default class UserDashboard extends Abstract {
       removeChildren(this.headerInfo);
       this.createCustomEvent('logOut');
     });
+  }
+
+  loadDashboard() {
+    this.elements.dashboard = create('div', 'dashboard', null, this.parent);
+    this.elements.dashboardLeft = create('div', 'dashboard__left', null, this.elements.dashboard);
+    this.elements.dashboardRight = create('div', 'dashboard__right', null, this.elements.dashboard);
+    this.incomeBlock = new Categories(this.elements.dashboardLeft, this.dataModel);
   }
 
   catchEvent(eventName) {
