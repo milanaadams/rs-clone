@@ -9,6 +9,7 @@ export default class NewUserCategory extends Abstract {
     this.catId = catId;
     this.lang = lang;
     this.elements = {};
+    this.icon = 'home';
     this.loadForm();
   }
 
@@ -26,12 +27,14 @@ export default class NewUserCategory extends Abstract {
     this.elements.newItemAmountInput = create('input', 'add-item__form-amount', null, this.elements.newItemAmount, ['type', 'number']);
     this.elements.formSubmit = create('div', 'add-item__form-submit', 'Add', this.elements.addForm);
 
-    this.elements.iconBtn.textContent = 'Icon';
+    this.elements.iconBtnImg = create('i', 'material-icons block__categories-icon', 'home', this.elements.iconBtn);
+    this.elements.iconBtn.addEventListener('click', () => { this.selectIcon(); });
     this.elements.newItemAmountInput.setAttribute('step', '0.01');
 
     switch (this.catId) {
       case 1:
         this.elements.addItemHead.classList.add('add-item__head--income');
+        this.elements.iconBtn.classList.add('add-item__icon--income');
         this.elements.addItemHead.textContent = locale.addNewSource.income.title[this.lang];
         this.elements.newItemNameInput.setAttribute('placeholder', locale.addNewSource.income.itemName[this.lang]);
         this.elements.newItemAmountInput.setAttribute('placeholder', locale.addNewSource.income.amount[this.lang]);
@@ -39,6 +42,7 @@ export default class NewUserCategory extends Abstract {
         break;
       case 2:
         this.elements.addItemHead.classList.add('add-item__head--accounts');
+        this.elements.iconBtn.classList.add('add-item__icon--accounts');
         this.elements.addItemHead.textContent = locale.addNewSource.accounts.title[this.lang];
         this.elements.newItemNameInput.setAttribute('placeholder', locale.addNewSource.accounts.itemName[this.lang]);
         this.elements.newItemAmountInput.setAttribute('placeholder', locale.addNewSource.accounts.amount[this.lang]);
@@ -46,6 +50,7 @@ export default class NewUserCategory extends Abstract {
         break;
       case 3:
         this.elements.addItemHead.classList.add('add-item__head--expenses');
+        this.elements.iconBtn.classList.add('add-item__icon--expenses');
         this.elements.addItemHead.textContent = locale.addNewSource.expenses.title[this.lang];
         this.elements.newItemNameInput.setAttribute('placeholder', locale.addNewSource.expenses.itemName[this.lang]);
         this.elements.newItemAmountInput.setAttribute('placeholder', locale.addNewSource.expenses.amount[this.lang]);
@@ -77,39 +82,92 @@ export default class NewUserCategory extends Abstract {
     this.sendToServer();
   }
 
+  selectIcon() {
+    this.icons = ['home', 'savings', 'account_balance_wallet', 'account_balance', 'local_grocery_store',
+      'vpn_key', 'restaurant', 'subway', 'add_shopping_cart', 'audiotrack', 'cleaning_services',
+      'account_box', 'alarm', 'analytics', 'anchor', 'api', 'article', 'arrow_right_alt', 'autorenew',
+      'book_online', 'bookmark_border', 'build', 'calendar_today', 'card_giftcard', 'card_travel', 'check_circle_outline',
+      'commute', 'credit_card', 'done_all', 'eco', 'extension', 'face', 'favorite_border', 'flight_takeoff', 'grade',
+      'important_devices', 'language', 'leaderboard', 'perm_identity', 'pets', 'settings_cell', 'settings_voice',
+      'shopping_cart', 'tour', 'work_outline', 'airplay', 'business', 'chat', 'mail_outline', 'location_on'];
+    const iconBoard = create('div', 'icon-board', null, document.body);
+    const iconBoardInner = create('div', 'icon-board__inner', null, iconBoard);
+
+    iconBoard.addEventListener('mouseleave', () => { iconBoard.remove(); });
+
+    this.icons.forEach((icon) => {
+      const iconItem = create('div', 'icon-board__item', null, iconBoardInner);
+      const iconImg = create('i', 'material-icons block__categories-icon icon-board__item-img', icon, iconItem);
+
+      iconItem.addEventListener('click', () => {
+        this.elements.iconBtnImg.textContent = iconImg.textContent;
+        this.icon = icon;
+        iconBoard.remove();
+      });
+    });
+  }
+
   sendToServer() {
     const userToken = localStorage.getItem('userToken');
 
     if (userToken) {
-      fetch('https://f19m-rsclone-back.herokuapp.com/api/categories/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userToken}`,
-        },
-        body: JSON.stringify({
-          "name": this.itemName,
-          "type": this.catId,
-          "plan": parseFloat(this.itemAmount),
-          "summa": 100,
-          "icoUrl": "home"
-        }),
-      })
-        .then((response) => {
-          if (response.status !== 200) {
-            //localStorage.removeItem('userToken');
-            //window.location.reload();
-            response.json().then((data) => {
-              console.log(data);
-            });
-            console.log('nope');
-          } else {
-            response.json().then((data) => {
-              console.log('success');
-            });
-          }
+      if (this.catId === 1 || this.catId === 3) {
+        fetch('https://f19m-rsclone-back.herokuapp.com/api/categories/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+          },
+          body: JSON.stringify({
+            "name": this.itemName,
+            "type": this.catId,
+            "plan": parseFloat(this.itemAmount),
+            "icoUrl": this.icon,
+          }),
         })
-        .catch((errMsg) => { throw new Error(errMsg); });
+          .then((response) => {
+            if (response.status !== 200) {
+              //localStorage.removeItem('userToken');
+              response.json().then((data) => {
+                console.log(data);
+              });
+              console.log('nope');
+            } else {
+              response.json().then((data) => {
+                console.log('success');
+              });
+            }
+          })
+          .catch((errMsg) => { throw new Error(errMsg); });
+      } else if (this.catId === 2) {
+        fetch('https://f19m-rsclone-back.herokuapp.com/api/categories/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+          },
+          body: JSON.stringify({
+            "name": this.itemName,
+            "type": this.catId,
+            "summa": parseFloat(this.itemAmount),
+            "icoUrl": this.icon,
+          }),
+        })
+          .then((response) => {
+            if (response.status !== 200) {
+              //localStorage.removeItem('userToken');
+              response.json().then((data) => {
+                console.log(data);
+              });
+              console.log('nope');
+            } else {
+              response.json().then((data) => {
+                console.log('success');
+              });
+            }
+          })
+          .catch((errMsg) => { throw new Error(errMsg); });
+      }
     }
   }
 }
