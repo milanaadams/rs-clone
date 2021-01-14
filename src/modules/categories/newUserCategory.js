@@ -90,7 +90,7 @@ export default class NewUserCategory extends Abstract {
         body: JSON.stringify({
           "name": this.itemName,
           "type": this.catId,
-          "plan": this.itemAmount,
+          "plan": parseFloat(this.itemAmount),
           "summa": 100,
           "icoUrl": "home"
         }),
