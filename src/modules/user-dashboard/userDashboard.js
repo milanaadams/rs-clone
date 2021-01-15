@@ -2,6 +2,7 @@ import create from '../utils/create';
 import removeChildren from '../utils/removeAllChildren';
 import Abstract from '../abstract/abstract';
 import Categories from '../categories/categories';
+import Chart from '../chart';
 
 export default class UserDashboard extends Abstract {
   constructor(parent, headerInfo, dataModel) {
@@ -43,6 +44,7 @@ export default class UserDashboard extends Abstract {
     this.elements.dashboardLeft = create('div', 'dashboard__left', null, this.elements.dashboard);
     this.elements.dashboardRight = create('div', 'dashboard__right', null, this.elements.dashboard);
     this.incomeBlock = new Categories(this.elements.dashboardLeft, this.dataModel);
+    this.chartBlock = new Chart(this.elements.dashboardLeft, this.dataModel);
   }
 
   catchEvent(eventName) {
