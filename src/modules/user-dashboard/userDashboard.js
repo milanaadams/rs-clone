@@ -2,7 +2,7 @@ import create from '../utils/create';
 import removeChildren from '../utils/removeAllChildren';
 import Abstract from '../abstract/abstract';
 import Categories from '../categories/categories';
-import Chart from '../chart';
+import Chart from '../chart/chart';
 
 export default class UserDashboard extends Abstract {
   constructor(parent, headerInfo, dataModel) {

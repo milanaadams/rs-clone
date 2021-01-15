@@ -89,6 +89,26 @@ const locale = {
     },
   },
 
+  chart: {
+    selectItems: [
+      {
+        id: 'incExp',
+        en: 'Income & Expenses',
+        ru: 'Доходы и расходы',
+      },
+      {
+        id: 'inc',
+        en: 'Income',
+        ru: 'Доходы',
+      },
+      {
+        id: 'exp',
+        en: 'Expenses',
+        ru: 'Расходы',
+      },
+    ],
+  },
+
 };
 
 export default locale;
