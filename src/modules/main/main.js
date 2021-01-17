@@ -4,6 +4,7 @@ import '../utils/assets';
 import Login from '../login/login';
 import DataModel from '../data-model/dataModel';
 import UserDashboard from '../user-dashboard/userDashboard';
+import config from '../../config'
 
 export default class Main extends Abstract {
   constructor() {
@@ -48,7 +49,7 @@ export default class Main extends Abstract {
     }
     this.userToken = localStorage.getItem('userToken');
     if (this.userToken) {
-      fetch('https://f19m-rsclone-back.herokuapp.com/api/user/getInfo', {
+      fetch(`${config.server}/api/user/getInfo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

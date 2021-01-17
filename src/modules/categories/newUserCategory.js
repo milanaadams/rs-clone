@@ -2,6 +2,7 @@ import create from '../utils/create';
 import locale from '../main/locale';
 import Popup from '../popup/popup';
 import Abstract from '../abstract/abstract';
+import config from '../../config'
 
 export default class NewUserCategory extends Abstract {
   constructor(catId, lang) {
@@ -81,7 +82,7 @@ export default class NewUserCategory extends Abstract {
     const userToken = localStorage.getItem('userToken');
 
     if (userToken) {
-      fetch('https://f19m-rsclone-back.herokuapp.com/api/categories/create', {
+      fetch(`${config.server}/api/categories/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

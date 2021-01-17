@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import create from '../utils/create';
 import Abstract from '../abstract/abstract';
+import config from '../../config'
 
 export default class Login extends Abstract {
   constructor(parent) {
@@ -80,7 +81,7 @@ export default class Login extends Abstract {
   }
 
   logInUser(userEmail, userPass) {
-    fetch('https://f19m-rsclone-back.herokuapp.com/api/login', {
+    fetch(`${config.server}/api/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -108,7 +109,7 @@ export default class Login extends Abstract {
   }
 
   registerUser(userEmail, userPass, userName) {
-    fetch('https://f19m-rsclone-back.herokuapp.com/api/registration', {
+    fetch(`${config.server}/api/registration`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
