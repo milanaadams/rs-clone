@@ -1,5 +1,7 @@
 import Main from './modules/main/main';
+import Language from './modules/language/language';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const app = new Main();
+  const language = new Language();
+  const app = new Main(language);
 });

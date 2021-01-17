@@ -4,12 +4,15 @@ import '../utils/assets';
 import Login from '../login/login';
 import DataModel from '../data-model/dataModel';
 import UserDashboard from '../user-dashboard/userDashboard';
+import removeChildren from '../utils/removeAllChildren';
 
 export default class Main extends Abstract {
-  constructor() {
+  constructor(lang) {
     super();
     this.userToken = null;
     this.elements = {};
+    this.lang = lang;
+    this.currentLang = this.lang.language;
     this.generateLayout();
   }
 
@@ -43,9 +46,8 @@ export default class Main extends Abstract {
   }
 
   loadContent() {
-    while (this.elements.mainInner.children.length > 0) {
-      this.elements.mainInner.children[0].remove();
-    }
+    removeChildren(this.elements.mainInner);
+    removeChildren(this.elements.headerRight);
     this.userToken = localStorage.getItem('userToken');
     if (this.userToken) {
       fetch('https://f19m-rsclone-back.herokuapp.com/api/user/getInfo', {
@@ -63,7 +65,7 @@ export default class Main extends Abstract {
           } else {
             response.json().then((data) => {
               this.dataModel = new DataModel(data);
-              this.userDashboard = new UserDashboard(this.elements.mainInner,
+              this.userDashboard = new UserDashboard(this.lang, this.elements.mainInner,
                 this.elements.headerRight, this.dataModel);
             });
           }
@@ -71,11 +73,15 @@ export default class Main extends Abstract {
         .catch((errMsg) => { throw new Error(errMsg); });
     }
 
-    if (!this.userToken) this.loadLoginForm();
+    if (!this.userToken) {
+      this.loadLoginForm();
+      const langSwitcher = create('div', 'language-switcher', this.lang.loadLanguageSwitcher(), this.elements.headerRight);
+      langSwitcher.addEventListener('click', () => { this.lang.switchLanguage(); });
+    }
   }
 
   loadLoginForm() {
-    this.loginForm = new Login(this.elements.mainInner, true);
+    this.loginForm = new Login(this.currentLang, this.elements.mainInner, true);
   }
 
   logOut() {
@@ -84,8 +90,14 @@ export default class Main extends Abstract {
     this.loadContent();
   }
 
+  switchAppLang() {
+    this.currentLang = this.lang.language;
+    this.loadContent();
+  }
+
   catchEvent(eventName) {
     if (eventName.match(/userLoggedIn/)) this.loadContent();
     if (eventName.match(/logOut/)) this.logOut();
+    if (eventName.match(/changeLang/)) this.switchAppLang();
   }
 }

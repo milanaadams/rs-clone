@@ -59,7 +59,7 @@
   }
 
   &__error-message{
-    flex-basis: 45%;
+    width: 45%;
     color: $main-accent-color;
     cursor: pointer;
     @include transition-primary;

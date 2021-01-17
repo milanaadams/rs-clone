@@ -32,7 +32,7 @@
     right: 25px;
     width: 50px;
     height: 50px;
-    box-shadow: 7px 7px 15px rgba(0,0,0,.13);
+    box-shadow: 0px 0px 15px rgba(0,0,0,.30);
     cursor: pointer;
     border-radius: 50%;
     background-color: #fff;
@@ -40,6 +40,17 @@
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
+    &--income{
+      background-color: $income-bg-color;
+      color: #fff;
+    }
+    &--accounts{
+      background-color: $accounts-bg-color;
+      color: #fff;
+    }
+    &--expenses{
+      background-color: $expenses-bg-color;
+    }
   }
 
   &__form{
@@ -93,4 +104,36 @@
 
 .error--add{
   bottom: -28px;
+}
+
+.icon-board{
+  position: fixed;
+  display: block;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 350px;
+  height: 450px;
+  overflow-y: scroll;
+  background-color: rgb(38, 40, 50);
+  z-index: 11;
+  &__inner{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 15px 20px 0;
+  }
+  &__item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    &-img{
+      font-size: 42px;
+    }
+  }
 }
