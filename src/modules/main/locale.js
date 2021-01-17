@@ -89,6 +89,30 @@ const locale = {
     },
   },
 
+  // update user category popup
+  updateUserCat: {
+    income: {
+      title: {
+        ru: 'Обновить источник дохода',
+        en: 'Update income source',
+      },
+    },
+
+    accounts: {
+      title: {
+        ru: 'Обновить счет',
+        en: 'Update account',
+      },
+    },
+
+    expenses: {
+      title: {
+        ru: 'Обновить категорию расходов',
+        en: 'Update expense category',
+      },
+    },
+  },
+
 };
 
 export default locale;

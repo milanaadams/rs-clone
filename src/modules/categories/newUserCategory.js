@@ -4,12 +4,13 @@ import Popup from '../popup/popup';
 import Abstract from '../abstract/abstract';
 
 export default class NewUserCategory extends Abstract {
-  constructor(catId, lang) {
+  constructor(catId, lang, ...args) {
     super();
     this.catId = catId;
     this.lang = lang;
     this.elements = {};
     this.icon = 'home';
+    this.args = args;
     this.loadForm();
   }
 
@@ -60,9 +61,35 @@ export default class NewUserCategory extends Abstract {
         this.elements.addItemHead.classList.add('');
     }
 
+    if (this.args) {
+      this.updateToCategory = this.args[0];
+      switch (this.catId) {
+        case 1:
+          this.elements.addItemHead.textContent = locale.updateUserCat.income.title[this.lang];
+          break;
+        case 2:
+          this.elements.addItemHead.textContent = locale.updateUserCat.accounts.title[this.lang];
+          break;
+        case 3:
+          this.elements.addItemHead.textContent = locale.updateUserCat.expenses.title[this.lang];
+          break;
+        default:
+          this.elements.addItemHead.classList.add('');
+      }
+      this.elements.iconBtnImg.textContent = this.updateToCategory.icoUrl;
+      this.icon = this.updateToCategory.icoUrl;
+      this.elements.newItemNameInput.setAttribute('value', this.updateToCategory.name);
+      if (this.updateToCategory.type === 1 || this.updateToCategory.type === 3) {
+        this.elements.newItemAmountInput.setAttribute('value', this.updateToCategory.plan);
+      } else {
+        this.elements.newItemAmountInput.setAttribute('value', this.updateToCategory.summa);
+      }
+      this.elements.formSubmit.textContent = 'Update';
+    }
+
     this.elements.formSubmit.addEventListener('click', () => { this.processForm(); });
 
-    const popup = new Popup(document.body, this.fragment);
+    this.addCatPopup = new Popup(document.body, this.fragment);
   }
 
   processForm() {
@@ -79,7 +106,11 @@ export default class NewUserCategory extends Abstract {
 
     this.itemName = this.elements.newItemNameInput.value;
     this.itemAmount = this.elements.newItemAmountInput.value;
-    this.sendToServer();
+    if (this.updateToCategory) {
+      this.sendUpdate();
+    } else {
+      this.sendToServer();
+    }
   }
 
   selectIcon() {
@@ -127,14 +158,12 @@ export default class NewUserCategory extends Abstract {
         })
           .then((response) => {
             if (response.status !== 200) {
-              //localStorage.removeItem('userToken');
-              response.json().then((data) => {
-                console.log(data);
-              });
-              console.log('nope');
+              this.createCustomEvent('logOut');
+              this.addCatPopup.closePopup();
             } else {
-              response.json().then((data) => {
-                console.log('success');
+              response.json().then(() => {
+                this.createCustomEvent('userLoggedIn');
+                this.addCatPopup.closePopup();
               });
             }
           })
@@ -155,19 +184,83 @@ export default class NewUserCategory extends Abstract {
         })
           .then((response) => {
             if (response.status !== 200) {
-              //localStorage.removeItem('userToken');
-              response.json().then((data) => {
-                console.log(data);
-              });
-              console.log('nope');
+              this.createCustomEvent('logOut');
+              this.addCatPopup.closePopup();
             } else {
-              response.json().then((data) => {
-                console.log('success');
+              response.json().then(() => {
+                this.createCustomEvent('userLoggedIn');
+                this.addCatPopup.closePopup();
               });
             }
           })
           .catch((errMsg) => { throw new Error(errMsg); });
       }
+    }
+  }
+
+  sendUpdate() {
+    const userToken = localStorage.getItem('userToken');
+
+    if (userToken) {
+      if (this.updateToCategory.type === 1 || this.updateToCategory.type === 3) {
+        fetch('https://f19m-rsclone-back.herokuapp.com/api/categories/update', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+          },
+          body: JSON.stringify({
+            "id": this.updateToCategory.id,
+            "name": this.itemName,
+            "plan": parseFloat(this.itemAmount),
+            "icoUrl": this.icon,
+          }),
+        })
+          .then((response) => {
+            if (response.status !== 200) {
+              this.createCustomEvent('logOut');
+              this.addCatPopup.closePopup();
+            } else {
+              response.json().then(() => {
+                this.createCustomEvent('userLoggedIn');
+                this.addCatPopup.closePopup();
+              });
+            }
+          })
+          .catch((errMsg) => { throw new Error(errMsg); });
+      } else if (this.updateToCategory.type === 2) {
+        fetch('https://f19m-rsclone-back.herokuapp.com/api/categories/update', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+          },
+          body: JSON.stringify({
+            "id": this.updateToCategory.id,
+            "name": this.itemName,
+            "summa": parseFloat(this.itemAmount),
+            "icoUrl": this.icon,
+          }),
+        })
+          .then((response) => {
+            if (response.status !== 200) {
+              this.createCustomEvent('logOut');
+              this.addCatPopup.closePopup();
+            } else {
+              response.json().then(() => {
+                this.createCustomEvent('userLoggedIn');
+                this.addCatPopup.closePopup();
+              });
+            }
+          })
+          .catch((errMsg) => { throw new Error(errMsg); });
+      }
+    }
+  }
+
+  catchEvent(eventName) {
+    if (this.evtArr.indexOf(eventName) === -1) {
+      throw new Error('Wrong custom event name.');
     }
   }
 }

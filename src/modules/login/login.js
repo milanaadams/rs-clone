@@ -123,7 +123,8 @@ export default class Login extends Abstract {
         if (response.status === 200) {
           this.showRegisteredSuccessfullyMsg();
         } else {
-          create('p', null, data.error, this.elements.errorMessage);
+          if (this.registerError) this.registerError.remove();
+          this.registerError = create('p', null, data.error, this.elements.errorMessage);
         }
       }))
       .catch((errMsg) => { throw new Error(errMsg); });

@@ -4,6 +4,7 @@ import '../utils/assets';
 import Login from '../login/login';
 import DataModel from '../data-model/dataModel';
 import UserDashboard from '../user-dashboard/userDashboard';
+import removeChildren from '../utils/removeAllChildren';
 
 export default class Main extends Abstract {
   constructor() {
@@ -43,9 +44,9 @@ export default class Main extends Abstract {
   }
 
   loadContent() {
-    while (this.elements.mainInner.children.length > 0) {
-      this.elements.mainInner.children[0].remove();
-    }
+    console.log('loaded');
+    removeChildren(this.elements.mainInner);
+    removeChildren(this.elements.headerRight);
     this.userToken = localStorage.getItem('userToken');
     if (this.userToken) {
       fetch('https://f19m-rsclone-back.herokuapp.com/api/user/getInfo', {
@@ -87,5 +88,6 @@ export default class Main extends Abstract {
   catchEvent(eventName) {
     if (eventName.match(/userLoggedIn/)) this.loadContent();
     if (eventName.match(/logOut/)) this.logOut();
+    if (eventName.match(/reloadContent/)) this.loadContent();
   }
 }
