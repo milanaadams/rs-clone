@@ -1,10 +1,10 @@
 import create from '../utils/create';
-import locale from '../main/locale';
+import locale from '../language/locale';
 import Popup from '../popup/popup';
 import Abstract from '../abstract/abstract';
 
 export default class NewUserCategory extends Abstract {
-  constructor(catId, lang, ...args) {
+  constructor(lang, catId, ...args) {
     super();
     this.catId = catId;
     this.lang = lang;
@@ -26,7 +26,7 @@ export default class NewUserCategory extends Abstract {
     this.elements.newItemNameInput = create('input', 'add-item__form-name', null, this.elements.newItemName);
     this.elements.newItemAmount = create('div', 'add-item__form-item', null, this.elements.addForm);
     this.elements.newItemAmountInput = create('input', 'add-item__form-amount', null, this.elements.newItemAmount, ['type', 'number']);
-    this.elements.formSubmit = create('div', 'add-item__form-submit', 'Add', this.elements.addForm);
+    this.elements.formSubmit = create('div', 'add-item__form-submit', locale.addBtn[this.lang], this.elements.addForm);
 
     this.elements.iconBtnImg = create('i', 'material-icons block__categories-icon', 'home', this.elements.iconBtn);
     this.elements.iconBtn.addEventListener('click', () => { this.selectIcon(); });
@@ -61,8 +61,8 @@ export default class NewUserCategory extends Abstract {
         this.elements.addItemHead.classList.add('');
     }
 
-    if (this.args) {
-      this.updateToCategory = this.args[0];
+    if (this.args.length > 0) {
+      [this.updateToCategory] = [this.args[0]];
       switch (this.catId) {
         case 1:
           this.elements.addItemHead.textContent = locale.updateUserCat.income.title[this.lang];
@@ -84,7 +84,7 @@ export default class NewUserCategory extends Abstract {
       } else {
         this.elements.newItemAmountInput.setAttribute('value', this.updateToCategory.summa);
       }
-      this.elements.formSubmit.textContent = 'Update';
+      this.elements.formSubmit.textContent = locale.updateBtn[this.lang];
     }
 
     this.elements.formSubmit.addEventListener('click', () => { this.processForm(); });

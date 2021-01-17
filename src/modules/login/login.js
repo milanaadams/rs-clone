@@ -1,13 +1,15 @@
 /* eslint-disable class-methods-use-this */
 import create from '../utils/create';
 import Abstract from '../abstract/abstract';
+import locale from '../language/locale';
 
 export default class Login extends Abstract {
-  constructor(parent) {
+  constructor(lang, parent) {
     super();
     this.parent = parent;
     this.login = true;
     this.elements = {};
+    this.lang = lang;
     this.generateForm();
   }
 
@@ -22,29 +24,29 @@ export default class Login extends Abstract {
     const formItemBtn = create('div', 'login__form-item', null, this.elements.form);
     const loginMeta = create('div', 'login__form-meta', null, this.elements.loginInner);
 
-    if (this.login) this.elements.title.textContent = 'Login';
-    else this.elements.title.textContent = 'Register';
+    if (this.login) this.elements.title.textContent = locale.loginForm.loginTitle[this.lang];
+    else this.elements.title.textContent = locale.register.registerTitle[this.lang];
 
     create('img', 'login__form-icon', null, formItemEmail, ['src', './assets/email-icon.png']);
     create('img', 'login__form-icon', null, formItemPass, ['src', './assets/pass-icon.png']);
     if (!this.login) create('img', 'login__form-icon', null, formItemName, ['src', './assets/username-icon.png']);
 
-    if (!this.login) this.elements.inputName = create('input', 'login__form-input --border', null, formItemName, ['type', 'text'], ['placeholder', 'Name'], ['name', 'userName']);
-    this.elements.inputEmail = create('input', 'login__form-input --border', null, formItemEmail, ['type', 'email'], ['placeholder', 'E-mail'], ['name', 'email']);
-    this.elements.inputPass = create('input', 'login__form-input', null, formItemPass, ['type', 'password'], ['placeholder', 'Password'], ['name', 'pass']);
+    if (!this.login) this.elements.inputName = create('input', 'login__form-input --border', null, formItemName, ['type', 'text'], ['placeholder', locale.register.registerNamePlaceholder[this.lang]], ['name', 'userName']);
+    this.elements.inputEmail = create('input', 'login__form-input --border', null, formItemEmail, ['type', 'email'], ['placeholder', locale.loginForm.emailPlaceholder[this.lang]], ['name', 'email']);
+    this.elements.inputPass = create('input', 'login__form-input', null, formItemPass, ['type', 'password'], ['placeholder', locale.loginForm.passPlaceholder[this.lang]], ['name', 'pass']);
     this.elements.inputBtn = create('input', 'login__form-input submit-btn', null, formItemBtn, ['type', 'submit']);
 
-    if (this.login) this.elements.inputBtn.setAttribute('value', 'Log In');
-    else this.elements.inputBtn.setAttribute('value', 'Sign Up');
+    if (this.login) this.elements.inputBtn.setAttribute('value', locale.loginForm.submitBtn[this.lang]);
+    else this.elements.inputBtn.setAttribute('value', locale.register.registerSignup[this.lang]);
 
     this.elements.errorMessage = create('span', 'login__error-message', '', loginMeta);
     if (this.login) {
-      this.elements.register = create('div', 'login__register', 'Don\'t have an account?', loginMeta);
-      this.elements.registerLink = create('span', 'login__register-link', 'Sign up', this.elements.register);
+      this.elements.register = create('div', 'login__register', locale.loginForm.metaTitle[this.lang], loginMeta);
+      this.elements.registerLink = create('span', 'login__register-link', locale.loginForm.metaLink[this.lang], this.elements.register);
       this.elements.registerLink.addEventListener('click', () => { this.login = false; this.switchForm(); });
     } else {
-      this.elements.offerLogIn = create('div', 'login__register', 'Already have an account?', loginMeta);
-      this.elements.offerLogInLink = create('span', 'login__register-link', 'Log in', this.elements.offerLogIn);
+      this.elements.offerLogIn = create('div', 'login__register', locale.register.meta.haveAccount[this.lang], loginMeta);
+      this.elements.offerLogInLink = create('span', 'login__register-link', locale.register.meta.login[this.lang], this.elements.offerLogIn);
       this.elements.offerLogInLink.addEventListener('click', () => { this.login = true; this.switchForm(); });
     }
 
@@ -99,8 +101,7 @@ export default class Login extends Abstract {
           localStorage.setItem('userToken', data.token);
           this.token = data.token;
           this.createCustomEvent('userLoggedIn');
-        }
-        if (response.status === 400) {
+        } else {
           create('p', null, data.error, this.elements.errorMessage);
         }
       }))

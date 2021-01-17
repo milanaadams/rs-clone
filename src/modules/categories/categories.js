@@ -1,23 +1,27 @@
 import create from '../utils/create';
-import locale from '../main/locale';
+import locale from '../language/locale';
 import NewUserCategory from './newUserCategory';
 import Abstract from '../abstract/abstract';
+import MoneyMove from '../money-move/money-move';
 
-function getCurrentMonth() {
+function getCurrentMonth(lang) {
   const currentDate = new Date();
-  const monthNames = ['January', 'February', 'March', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  return `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+  const monthNames = {
+    en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    ru: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+  };
+  return `${monthNames[lang][currentDate.getMonth()]} ${currentDate.getFullYear()}`;
 }
 
 export default class Categories extends Abstract {
-  constructor(parent, dataModel) {
+  constructor(lang, parent, dataModel) {
     super();
     this.parent = parent;
     this.dataModel = dataModel;
     this.elements = {};
     this.received = 0;
     this.budget = 0;
-    this.lang = 'en';
+    this.lang = lang;
     this.loadBlocks();
   }
 
@@ -30,7 +34,7 @@ export default class Categories extends Abstract {
 
       const blockTitle = create('div', 'block__title', null, blockHead);
       create('h2', 'block__name', locale[block.code].blockName[this.lang], blockTitle);
-      create('span', 'block__subtitle', getCurrentMonth(), blockTitle);
+      create('span', 'block__subtitle', getCurrentMonth(this.lang), blockTitle);
 
       const blockStats = create('div', 'block__stats', null, blockHead);
 
@@ -85,15 +89,16 @@ export default class Categories extends Abstract {
       }
       categoryEdit.addEventListener('click', () => { this.updateCategory(item); });
       categoryDelete.addEventListener('click', () => { this.deleteCategory(item); });
+      iconBg.addEventListener('click', () => { this.popup = new MoneyMove(this.lang, item); });
     });
     const categoryItemAdd = create('div', 'block__categories-item block__categories-item--add', null, blockCategories);
     create('div', 'block__categories-img block__categories-img--add', '<i class="material-icons block__categories-icon">add</i>', categoryItemAdd);
 
-    categoryItemAdd.addEventListener('click', () => { this.popUp = new NewUserCategory(currentCat.id, this.lang); });
+    categoryItemAdd.addEventListener('click', () => { this.popUp = new NewUserCategory(this.lang, currentCat.id); });
   }
 
   updateCategory(category) {
-    this.popUp = new NewUserCategory(category.type, this.lang, category);
+    this.popUp = new NewUserCategory(this.lang, category.type, category);
   }
 
   deleteCategory(category) {
