@@ -112,7 +112,6 @@ export default class Chart extends Abstract {
     const curValue = this[source].find((item) => item.id === value);
     if (!curValue) return;
 
-    console.log(curValue);
     if (source === 'selectItems') {
       this.filter.catType = curValue.catType;
       if (this.filter.userCat !== undefined) delete this.filter.userCat;
@@ -155,8 +154,6 @@ export default class Chart extends Abstract {
   }
 
   prepareData(data) {
-    console.log(data);
-
     const dynamicColors = function () {
       const r = Math.floor(Math.random() * 255);
       const g = Math.floor(Math.random() * 255);
@@ -234,8 +231,8 @@ export default class Chart extends Abstract {
     })
       .then((response) => {
         if (response.status !== 200) {
-          // this.createCustomEvent('logOut');
-          console.log('gg');
+          // to-do: тут так надо делать, если пдиет ответ, что ключ протух?
+          this.createCustomEvent('logOut');
         } else {
           response.json().then((data) => {
             this.prepareData(data);
