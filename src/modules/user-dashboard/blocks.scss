@@ -52,12 +52,32 @@
     display: flex;
     flex-wrap: wrap;
     &-item{
+      position: relative;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       width: 120px;
       margin: 0 3px 15px;
+      &-edit{
+        position: absolute;
+        top: 40px;
+        right: 0;
+        font-size: 22px;
+        color: $block-subtitle-text;
+        cursor: pointer;
+        opacity: 0;
+        @include transition-primary;
+      }
+      &-delete{
+        top: auto;
+        bottom: 0;
+      }
+      &:hover{
+        .block__categories-item-edit{
+          opacity: 0.5;
+        }
+      }
     }
     &-title{
       line-height: 38px;
