@@ -210,21 +210,54 @@ const locale = {
   chart: {
     selectItems: [
       {
-        id: 'incExp',
-        en: 'Income & Expenses',
-        ru: 'Доходы и расходы',
+        id: 'incExpTotal',
+        en: 'Total Income & Expenses',
+        ru: 'Суммарные Доходы и Расходы',
+        catType: [1, 3],
       },
       {
-        id: 'inc',
-        en: 'Income',
-        ru: 'Доходы',
+        id: 'incTotal',
+        en: 'Total Income',
+        ru: 'Суммарные Доходы',
+        catType: [1],
+      },
+      {
+        id: 'expTotal',
+        en: 'Total Expenses',
+        ru: 'Суммарные Расходы',
+        catType: [3],
       },
       {
         id: 'exp',
-        en: 'Expenses',
-        ru: 'Расходы',
+        en: 'Expenses by category',
+        ru: 'Расходы по категориям',
+        catType: [3],
+        userCat: 0,
       },
     ],
+    selectTimes: {
+      data: [
+        {
+          id: 'day',
+          en: 'Group by Day',
+          ru: 'Группировка по Дням',
+        },
+        {
+          id: 'month',
+          en: 'Group by Month',
+          ru: 'Группировка по Месяцам',
+        },
+        {
+          id: 'year',
+          en: 'Group by Year',
+          ru: 'Группировка по Годам',
+        },
+      ],
+      titel: {
+        en: 'Group by',
+        ru: 'Группировка по',
+      },
+    },
   },
 
 };

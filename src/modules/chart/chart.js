@@ -1,66 +1,78 @@
 import ChartJs from 'chart.js';
 import create from '../utils/create';
-import locale from '../main/locale';
-import config from '../../config'
-import DataSetItem from './dataSetItem'
+import locale from '../language/locale';
+import config from '../../config';
+import DataSetItem from './dataSetItem';
+import Abstract from '../abstract/abstract';
 
-export default class Chart {
-  constructor(parent, dataModel) {
+export default class Chart extends Abstract {
+  constructor(lang, parent, dataModel) {
+    super();
     this.parent = parent;
     this.dataModel = dataModel;
     this.elements = {};
-    this.lang = 'en';
-    this.indicatorList = locale.chart.selectItems;
-   
-    this.currentIndicator = this.indicatorList[0];
+    this.lang = lang;
+
+    // this.selectItems = locale.chart.selectItems.map((item) => {
+    //   const obj = {
+    //     id: item.id,
+    //     name: item[lang.language],
+    //   };
+    //   if (item.catType) obj.catType = item.catType;
+    //   if (item.userCat !== undefined) obj.userCat = item.userCat;
+    //   return obj;
+    // });
+
+    // this.selectTimes = locale.chart.selectTimes.data.map((item) => {
+    //   const obj = {
+    //     id: item.id,
+    //     name: item[lang.language],
+    //   };
+    //   return obj;
+    // });
+
+    // to-do dacapicker если будет время
 
     this.filter = {
       dateTrunc: 'day',
       dateFrom: '',
       dateTo: '',
-      catType: 3,
+      catType: [3],
     };
 
-    this.getData();
     this.chartSettingsInit();
+    this.getData();
     this.loadBlocks();
-     
-
-    // https://www.chartjs.org/samples/latest/scales/logarithmic/line.html
-    // https://www.chartjs.org/docs/latest/
   }
 
   chartSettingsInit() {
     this.timeFormat = 'DD/MM/YYYY';
 
-    const chartSettings = {
+    this.chartConfig = {
       responsive: true,
-      title:      {
-          display: true,
-          text:    "Chart.js Time Scale"
+      title: {
+        display: true,
       },
-      scales:     {
-          xAxes: [{
-              type:       "time",
-              time:       {
-                  format: this.timeFormat,
-                  tooltipFormat: 'll'
-              },
-              scaleLabel: {
-                  display:     true,
-                  labelString: 'Date'
-              }
-          }],
-          yAxes: [{
-              scaleLabel: {
-                  display:     true,
-                  labelString: 'value'
-              }
-          }]
-      }
-  }
-
-    this.chartConfig = chartSettings;
+      scales: {
+        xAxes: [{
+          type: 'time',
+          time: {
+            format: this.timeFormat,
+            tooltipFormat: 'll',
+          },
+          scaleLabel: {
+            display: false,
+            labelString: 'Date',
+          },
+        }],
+        yAxes: [{
+          scaleLabel: {
+            display: false,
+            labelString: 'value',
+          },
+        }],
+      },
+    };
   }
 
   loadBlocks() {
@@ -68,66 +80,148 @@ export default class Chart {
     const blockHead = create('div', 'block__head', null, blockItem);
     const blockBody = create('div', 'block__body', null, blockItem);
 
-    const select = create('select', 'chart-select', null, blockHead, ['id', 'chart-select']);
-    locale.chart.selectItems.forEach((item) => {
-      create('option', null, item[this.lang], select, ['value', item.id]);
-    });
+    this.elements.selectItems = create('select', 'chart-select', null, blockHead, ['source', 'selectItems']);
+    // this.selectItems.forEach((item) => {
+    //   create('option', null, item.name, this.elements.selectItems, ['value', item.id]);
+    // });
+    this.elements.selectItems.addEventListener('change', (evt) => this.selectHandler(evt));
 
-
-
-    // this.speedData = {
-    //   labels: [5,10,15,20,25,30,35],
-    //   datasets: [{
-    //     label: "Car Speed",
-    //     data: [0, 59, 75, 20, 20, 55, 40],
-    //     fill: false
-    //   }]
-    // };
-     
+    this.elements.selectTimes = create('select', 'chart-select', null, blockHead, ['source', 'selectTimes']);
+    // this.selectTimes.forEach((item) => {
+    //   create('option', null, item.name, this.elements.selectTimes, ['value', item.id]);
+    // });
+    this.elements.selectTimes.addEventListener('change', (evt) => this.selectHandler(evt));
+    this.switchAppLang();
 
     this.chartData = {};
-
- 
-
-
     const canvasBox = create('div', 'canvasBox', null, blockBody);
     this.elements.canvas = create('canvas', 'canvas', null, canvasBox, ['width', '200'], ['height', '70'], ['id', 'chart']);
     this.elements.ctx = this.elements.canvas.getContext('2d');
-    this.chart = new ChartJs(this.elements.ctx,  {
+    this.chart = new ChartJs(this.elements.ctx, {
       type: 'line',
       data: this.chartData,
-      options: this.chartConfig
-  });
+      options: this.chartConfig,
+    });
   }
 
+  selectHandler(evt) {
+    const { target } = evt;
+    const { source } = target.dataset;
+    const { value } = evt.target.options[evt.target.selectedIndex];
 
+    const curValue = this[source].find((item) => item.id === value);
+    if (!curValue) return;
 
-  prepareData(data){
-    console.log(data);
-    const color = ChartJs.helpers.color;
+    console.log(curValue);
+    if (source === 'selectItems') {
+      this.filter.catType = curValue.catType;
+      if (this.filter.userCat !== undefined) delete this.filter.userCat;
+      if (curValue.userCat !== undefined) this.filter.userCat = curValue.userCat;
+    } else if (source === 'selectTimes') {
+      this.filter.dateTrunc = curValue.id;
+    }
 
-   
-    const dataSetData = data.map(el=> {
+    this.getData();
+  }
+
+  switchAppLang() {
+    this.selectItems = locale.chart.selectItems.map((item) => {
       const obj = {
-      y: el.sum,
-      x: new Date(el.date)
-    };
-    return obj;
-  });
-    const dataSet = new DataSetItem('Test', dataSetData, false, 'red', 'red', 2);
+        id: item.id,
+        name: item[this.lang.language],
+      };
+      if (item.catType) obj.catType = item.catType;
+      if (item.userCat !== undefined) obj.userCat = item.userCat;
+      return obj;
+    });
 
-    this.chartData.datasets = []
-    this.chartData.datasets.push(dataSet)
-    
-    
+    this.selectTimes = locale.chart.selectTimes.data.map((item) => {
+      const obj = {
+        id: item.id,
+        name: item[this.lang.language],
+      };
+      return obj;
+    });
+
+    this.elements.selectItems.innerHTML = '';
+    this.selectItems.forEach((item) => {
+      create('option', null, item.name, this.elements.selectItems, ['value', item.id]);
+    });
+
+    this.elements.selectTimes.innerHTML = '';
+    this.selectTimes.forEach((item) => {
+      create('option', null, item.name, this.elements.selectTimes, ['value', item.id]);
+    });
+  }
+
+  prepareData(data) {
+    console.log(data);
+
+    const dynamicColors = function () {
+      const r = Math.floor(Math.random() * 255);
+      const g = Math.floor(Math.random() * 255);
+      const b = Math.floor(Math.random() * 255);
+      return `rgb(${r},${g},${b})`;
+    };
+
+    this.chartData.datasets = [];
+
+    this.filter.catType.forEach((typeId) => {
+      const dataSetData = data.filter((item) => item.type_id === typeId).map((el) => {
+        const obj = {
+          y: el.sum,
+          x: new Date(el.date),
+        };
+        if (this.filter.userCat !== undefined) {
+          obj.userCat = el.user_cat_id;
+        }
+        return obj;
+      });
+
+      let color;
+      if (this.filter.userCat !== undefined) {
+        const newDataSetData = dataSetData.reduce((prev, cur, idx) => {
+          if (!prev[cur.userCat]) prev[cur.userCat] = [];
+          const newObj = { ...cur };
+          delete newObj.userCat;
+          prev[cur.userCat].push(newObj);
+          return prev;
+        }, {});
+
+        Object.keys(newDataSetData).forEach((userCatId) => {
+          const title = this.dataModel.userCategories.find(
+            (uc) => uc.id === parseInt(userCatId, 10),
+          ).name;
+          const dataList = newDataSetData[userCatId];
+          color = dynamicColors();
+
+          const dataSet = new DataSetItem(title, dataList, false, color, color, 2);
+          this.chartData.datasets.push(dataSet);
+        });
+      } else {
+        let title;
+
+        if (typeId === 1) {
+          title = locale.income.blockName[this.lang.language];
+          title = title[0].toUpperCase() + title.slice(1);
+          color = 'blue';
+        } else {
+          title = locale.expenses.blockName[this.lang.language];
+          title = title[0].toUpperCase() + title.slice(1);
+          color = 'red';
+        }
+
+        const dataSet = new DataSetItem(title, dataSetData, false, color, color, 2);
+        this.chartData.datasets.push(dataSet);
+      }
+    });
+
     this.chart.update();
   }
 
   getData() {
-    this.data = [];
     const userToken = localStorage.getItem('userToken');
 
-   
     fetch(`${config.server}/api/moves/getDataByCatType`, {
       method: 'POST',
       headers: {
@@ -140,9 +234,7 @@ export default class Chart {
     })
       .then((response) => {
         if (response.status !== 200) {
-          // this.userToken = null;
-          // localStorage.removeItem('userToken');
-          // this.loadLoginForm();
+          // this.createCustomEvent('logOut');
           console.log('gg');
         } else {
           response.json().then((data) => {
@@ -151,5 +243,9 @@ export default class Chart {
         }
       })
       .catch((errMsg) => { throw new Error(errMsg); });
+  }
+
+  catchEvent(eventName) {
+    if (eventName.match(/changeLang/)) this.switchAppLang();
   }
 }

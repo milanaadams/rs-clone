@@ -50,7 +50,7 @@ export default class UserDashboard extends Abstract {
     this.elements.dashboardLeft = create('div', 'dashboard__left', null, this.elements.dashboard);
     this.elements.dashboardRight = create('div', 'dashboard__right', null, this.elements.dashboard);
     this.incomeBlock = new Categories(this.lang, this.elements.dashboardLeft, this.dataModel);
-    this.chartBlock = new Chart(this.elements.dashboardLeft, this.dataModel);
+    this.chartBlock = new Chart(this.langObj, this.elements.dashboardLeft, this.dataModel);
   }
 
   catchEvent(eventName) {
