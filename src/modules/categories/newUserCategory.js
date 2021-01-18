@@ -2,6 +2,7 @@ import create from '../utils/create';
 import locale from '../language/locale';
 import Popup from '../popup/popup';
 import Abstract from '../abstract/abstract';
+import config from '../../config';
 
 export default class NewUserCategory extends Abstract {
   constructor(lang, catId, ...args) {
@@ -143,17 +144,17 @@ export default class NewUserCategory extends Abstract {
 
     if (userToken) {
       if (this.catId === 1 || this.catId === 3) {
-        fetch('https://f19m-rsclone-back.herokuapp.com/api/categories/create', {
+        fetch(`${config.server}/api/categories/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${userToken}`,
+            Authorization: `Bearer ${userToken}`,
           },
           body: JSON.stringify({
-            "name": this.itemName,
-            "type": this.catId,
-            "plan": parseFloat(this.itemAmount),
-            "icoUrl": this.icon,
+            name: this.itemName,
+            type: this.catId,
+            plan: parseFloat(this.itemAmount),
+            icoUrl: this.icon,
           }),
         })
           .then((response) => {
@@ -169,17 +170,17 @@ export default class NewUserCategory extends Abstract {
           })
           .catch((errMsg) => { throw new Error(errMsg); });
       } else if (this.catId === 2) {
-        fetch('https://f19m-rsclone-back.herokuapp.com/api/categories/create', {
+        fetch(`${config.server}/api/categories/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${userToken}`,
+            Authorization: `Bearer ${userToken}`,
           },
           body: JSON.stringify({
-            "name": this.itemName,
-            "type": this.catId,
-            "summa": parseFloat(this.itemAmount),
-            "icoUrl": this.icon,
+            name: this.itemName,
+            type: this.catId,
+            summa: parseFloat(this.itemAmount),
+            icoUrl: this.icon,
           }),
         })
           .then((response) => {
@@ -203,17 +204,17 @@ export default class NewUserCategory extends Abstract {
 
     if (userToken) {
       if (this.updateToCategory.type === 1 || this.updateToCategory.type === 3) {
-        fetch('https://f19m-rsclone-back.herokuapp.com/api/categories/update', {
+        fetch(`${config.server}/api/categories/update`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${userToken}`,
+            Authorization: `Bearer ${userToken}`,
           },
           body: JSON.stringify({
-            "id": this.updateToCategory.id,
-            "name": this.itemName,
-            "plan": parseFloat(this.itemAmount),
-            "icoUrl": this.icon,
+            id: this.updateToCategory.id,
+            name: this.itemName,
+            plan: parseFloat(this.itemAmount),
+            icoUrl: this.icon,
           }),
         })
           .then((response) => {
@@ -229,17 +230,17 @@ export default class NewUserCategory extends Abstract {
           })
           .catch((errMsg) => { throw new Error(errMsg); });
       } else if (this.updateToCategory.type === 2) {
-        fetch('https://f19m-rsclone-back.herokuapp.com/api/categories/update', {
+        fetch(`${config.server}api/categories/update`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${userToken}`,
+            Authorization: `Bearer ${userToken}`,
           },
           body: JSON.stringify({
-            "id": this.updateToCategory.id,
-            "name": this.itemName,
-            "summa": parseFloat(this.itemAmount),
-            "icoUrl": this.icon,
+            id: this.updateToCategory.id,
+            name: this.itemName,
+            summa: parseFloat(this.itemAmount),
+            icoUrl: this.icon,
           }),
         })
           .then((response) => {

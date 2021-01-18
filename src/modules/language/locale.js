@@ -165,7 +165,7 @@ const locale = {
     },
   },
 
-  //menu
+  // menu
   menu: {
     logout: {
       en: 'Log out',
@@ -173,7 +173,7 @@ const locale = {
     },
   },
 
-  //popup
+  // popup
   updateBtn: {
     en: 'Update',
     ru: 'Обновить',
@@ -204,6 +204,59 @@ const locale = {
     labelDate: {
       en: 'Date',
       ru: 'Дата',
+    },
+  },
+
+  chart: {
+    selectItems: [
+      {
+        id: 'incExpTotal',
+        en: 'Total Income & Expenses',
+        ru: 'Суммарные Доходы и Расходы',
+        catType: [1, 3],
+      },
+      {
+        id: 'incTotal',
+        en: 'Total Income',
+        ru: 'Суммарные Доходы',
+        catType: [1],
+      },
+      {
+        id: 'expTotal',
+        en: 'Total Expenses',
+        ru: 'Суммарные Расходы',
+        catType: [3],
+      },
+      {
+        id: 'exp',
+        en: 'Expenses by category',
+        ru: 'Расходы по категориям',
+        catType: [3],
+        userCat: 0,
+      },
+    ],
+    selectTimes: {
+      data: [
+        {
+          id: 'day',
+          en: 'Group by Day',
+          ru: 'Группировка по Дням',
+        },
+        {
+          id: 'month',
+          en: 'Group by Month',
+          ru: 'Группировка по Месяцам',
+        },
+        {
+          id: 'year',
+          en: 'Group by Year',
+          ru: 'Группировка по Годам',
+        },
+      ],
+      titel: {
+        en: 'Group by',
+        ru: 'Группировка по',
+      },
     },
   },
 

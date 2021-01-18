@@ -18,7 +18,8 @@ module.exports = (env, options) => {
       filename: 'script.js'
     },
     devServer: {
-      contentBase: './dist'
+      contentBase: './dist',
+      writeToDisk: true
     },
 
     module: {
@@ -59,7 +60,9 @@ module.exports = (env, options) => {
     },
 
     plugins: [
-      new CleanWebpackPlugin(), 
+      new CleanWebpackPlugin({
+        cleanStaleWebpackAssets: false,
+      }), 
       new HtmlWebpackPlugin({
         template: './src/index.html'
     }),
