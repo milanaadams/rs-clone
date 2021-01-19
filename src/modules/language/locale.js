@@ -205,6 +205,11 @@ const locale = {
       en: 'Date',
       ru: 'Дата',
     },
+
+    labelComment: {
+      en: 'Comment',
+      ru: 'Комментарий',
+    },
   },
 
   chart: {

@@ -89,7 +89,7 @@ export default class Categories extends Abstract {
       }
       categoryEdit.addEventListener('click', () => { this.updateCategory(item); });
       categoryDelete.addEventListener('click', () => { this.deleteCategory(item); });
-      iconBg.addEventListener('click', () => { this.popup = new MoneyMove(this.lang, item); });
+      iconBg.addEventListener('click', () => { this.popup = new MoneyMove(this.lang, item, this.dataModel); });
     });
     const categoryItemAdd = create('div', 'block__categories-item block__categories-item--add', null, blockCategories);
     create('div', 'block__categories-img block__categories-img--add', '<i class="material-icons block__categories-icon">add</i>', categoryItemAdd);

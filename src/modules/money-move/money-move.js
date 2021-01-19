@@ -1,10 +1,12 @@
 import create from '../utils/create';
 import locale from '../language/locale';
 import Popup from '../popup/popup';
+import config from '../../config';
 
 export default class MoneyMove {
-  constructor(lang, category) {
+  constructor(lang, category, dataModel) {
     this.currentCategory = category;
+    this.dataModel = dataModel;
     this.inputInfo = {
       moveFrom: null,
       moveTo: null,
@@ -15,12 +17,8 @@ export default class MoneyMove {
   }
 
   loadTransferForm() {
-    if (this.currentCategory.type === 3) {
-      this.inputInfo.moveTo = this.currentCategory;
-    } else {
-      this.inputInfo.moveFrom = this.currentCategory;
-    }
-
+    
+    this.loadToAndFromCategories();
     const fragment = document.createDocumentFragment();
 
     const moveFrom = this.inputInfo.moveFrom ? this.inputInfo.moveFrom.name : '';
@@ -31,13 +29,13 @@ export default class MoneyMove {
 
     this.elements.moveFromBlock = create('div', 'move-form__item', null, this.elements.form);
     create('label', 'move-form__label', locale.move.labelFrom[this.lang], this.elements.moveFromBlock);
-    this.elements.moveFrom = create('input', 'move-form__input', null, this.elements.moveFromBlock, ['value', moveFrom]);
-    this.elements.moveFrom.setAttribute('readonly', true);
+    this.elements.formSelectFrom = create('select', 'move-form__select', null, this.elements.moveFromBlock);
+    this.loadSelectOptions(this.categoriesFrom, this.elements.formSelectFrom, this.currentCategory.id);
 
     this.elements.moveToBlock = create('div', 'move-form__item', null, this.elements.form);
     create('label', 'move-form__label', locale.move.labelTo[this.lang], this.elements.moveToBlock);
-    this.elements.moveTo = create('input', 'move-form__input', null, this.elements.moveToBlock, ['value', moveTo]);
-    this.elements.moveTo.setAttribute('readonly', true);
+    this.elements.formSelectTo = create('select', 'move-form__select', null, this.elements.moveToBlock);
+    this.loadSelectOptions(this.categoriesTo, this.elements.formSelectTo, this.currentCategory.id);
 
     this.elements.moveAmountBlock = create('div', 'move-form__item', null, this.elements.form);
     create('label', 'move-form__label', locale.move.labelAmount[this.lang], this.elements.moveAmountBlock);
@@ -46,8 +44,84 @@ export default class MoneyMove {
 
     this.elements.moveDateBlock = create('div', 'move-form__item', null, this.elements.form);
     create('label', 'move-form__label', locale.move.labelDate[this.lang], this.elements.moveDateBlock);
-    this.elements.moveTo = create('input', 'move-form__input', null, this.elements.moveDateBlock, ['type', 'date']);
+    this.elements.moveDate = create('input', 'move-form__input', null, this.elements.moveDateBlock, ['type', 'date']);
+
+    this.elements.moveCommentBlock = create('div', 'move-form__item', null, this.elements.form);
+    create('label', 'move-form__label', locale.move.labelComment[this.lang], this.elements.moveCommentBlock);
+    this.elements.moveComment = create('input', 'move-form__input', null, this.elements.moveCommentBlock, ['type', 'text']);
+
+    this.elements.formBtn = create('div', 'move-form__btn', 'submit', this.elements.form);
+ 
+    this.elements.formBtn.addEventListener('click', () => { 
+      this.generateMoneyMove(parseInt(this.elements.formSelectFrom.value, 10), parseInt(this.elements.formSelectTo.value, 10),
+        this.elements.moveDate.value, parseFloat(this.elements.moveAmount.value), this.elements.moveComment.value);
+    });
 
     this.popup = new Popup(document.body, fragment);
+  }
+
+  loadToAndFromCategories() {
+    if (this.currentCategory.type === 3) {
+      this.inputInfo.moveTo = this.currentCategory;
+      this.categoriesTo = this.dataModel.getAllCagetoryByType(this.currentCategory.type);
+      this.categoriesFrom = this.dataModel.getAllCagetoryByType(2);
+    } else if (this.currentCategory.type === 2) {
+      this.inputInfo.moveFrom = this.currentCategory;
+      this.categoriesFrom = this.dataModel.getAllCagetoryByType(this.currentCategory.type);
+
+      this.categoriesTo = this.dataModel.getAllCagetoryByType(2).concat(this.dataModel.getAllCagetoryByType(3));
+    } else {
+      this.inputInfo.moveFrom = this.currentCategory;
+      this.categoriesFrom = this.dataModel.getAllCagetoryByType(this.currentCategory.type);
+      this.categoriesTo = this.dataModel.getAllCagetoryByType(2);
+    }
+  }
+
+  loadSelectOptions(category, parent, selectedId) {
+    category.forEach((element) => {
+      const optionItem = create('option', 'move-form__option', element.name, parent, ['value', element.id]);
+      if (this.currentCategory.type === 2) {
+        if (parent === this.elements.formSelectFrom && element.id === selectedId) optionItem.setAttribute('selected', true); console.log('yes');
+      } else {
+        if(element.id === selectedId) optionItem.setAttribute('selected', true);
+      }
+      
+    });
+  }
+
+  generateMoneyMove(catFrom, catTo, transactionDate, amount, userComment) {
+    console.log(catFrom, catTo, transactionDate, amount, userComment);
+    this.userToken = localStorage.getItem('userToken');
+  
+    if (this.userToken) {
+      fetch(`${config.server}/api/moves/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.userToken}`,
+        },
+        body: JSON.stringify({
+          "move": {
+            cat_from: catFrom,
+            cat_to: catTo,
+            date: transactionDate,
+            value: amount,
+            comment: userComment,
+          }
+        }),
+      })
+        .then((response) => {
+          if (response.status !== 200) {
+            //this.createCustomEvent('logOut');
+            console.log('nope')
+          } else {
+            response.json().then(() => {
+              this.createCustomEvent('userLoggedIn');
+              console.log('success');
+            });
+          }
+        })
+        .catch((errMsg) => { throw new Error(errMsg); });
+    }
   }
 }
