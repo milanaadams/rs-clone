@@ -97,10 +97,11 @@ export default class NewUserCategory extends Abstract {
     const formFields = [this.elements.newItemNameInput, this.elements.newItemAmountInput];
     formFields.forEach((el) => {
       if (el.value === '') {
-        const errorBlock = create('div', 'error error--add');
-        create('span', 'error-text', 'This field should not be empty', errorBlock);
-        el.parentElement.appendChild(errorBlock);
-        el.parentElement.addEventListener('click', () => { errorBlock.remove(); });
+        if (this.elements.errorBlock) this.elements.errorBlock.remove();
+        this.elements.errorBlock = create('div', 'error error--add');
+        create('span', 'error-text', 'This field should not be empty', this.elements.errorBlock);
+        el.parentElement.appendChild(this.elements.errorBlock);
+        el.parentElement.addEventListener('click', () => { this.elements.errorBlock.remove(); });
       }
     });
     if (formFields.some((el) => el.value === '')) return;
