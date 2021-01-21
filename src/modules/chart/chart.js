@@ -231,7 +231,7 @@ export default class Chart extends Abstract {
     })
       .then((response) => {
         if (response.status !== 200) {
-          // to-do: тут так надо делать, если пдиет ответ, что ключ протух?
+          // ДА!!  to-do: тут так надо делать, если пдиет ответ, что ключ протух?
           this.createCustomEvent('logOut');
         } else {
           response.json().then((data) => {

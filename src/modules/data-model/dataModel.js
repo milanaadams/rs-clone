@@ -17,4 +17,9 @@ export default class DataModel {
     });
     this.moves.offset = data.user.moves.offset;
   }
+
+  getAllCagetoryByType(type) {
+    const selectedCategories = this.userCategories.filter((category) => category.type === type);
+    return selectedCategories;
+  }
 }
