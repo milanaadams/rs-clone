@@ -3,6 +3,7 @@ import locale from '../language/locale';
 import NewUserCategory from './newUserCategory';
 import Abstract from '../abstract/abstract';
 import MoneyMove from '../money-move/money-move';
+import config from '../../config';
 
 function getCurrentMonth(lang) {
   const currentDate = new Date();
@@ -84,8 +85,13 @@ export default class Categories extends Abstract {
         itemSum.style.color = '#f9a825';
       }
       if (item.type === 3) {
-        iconBg.style.backgroundColor = '#c1c5c9';
-        itemSum.style.color = '#0ac38e';
+        if (item.summa > item.plan) {
+          iconBg.style.backgroundColor = '#e53935';
+          itemSum.style.color = '#e53935';
+        } else {
+          iconBg.style.backgroundColor = '#c1c5c9';
+          itemSum.style.color = '#0ac38e';
+        }
       }
       categoryEdit.addEventListener('click', () => { this.updateCategory(item); });
       categoryDelete.addEventListener('click', () => { this.deleteCategory(item); });
@@ -105,7 +111,7 @@ export default class Categories extends Abstract {
     this.userToken = localStorage.getItem('userToken');
 
     if (this.userToken) {
-      fetch('https://f19m-rsclone-back.herokuapp.com/api/categories/delete', {
+      fetch(`${config.server}/api/categories/delete`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

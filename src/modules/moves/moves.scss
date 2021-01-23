@@ -1,0 +1,65 @@
+.moves-history{
+  &__day{
+    &-head{
+      margin-bottom: 12px;
+      font-size: 21px;
+      color: $block-title-text;
+      text-align: left;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+    &-list{
+      list-style-type: none;
+      margin-bottom: 20px;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 2px 2px 9px rgba(0,0,0,.13);
+    }
+    &-item{
+      padding: 20px 50px;
+      min-height: 80px;
+      background-color: #fff;
+      &:first-child{
+        border-radius: 4px 4px 0 0;
+      }
+      &:not(:last-child){
+        border-bottom: 1px solid rgba(222,220,220,.8);
+      }
+    }
+  }
+  &__transaction{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    &-comment{
+      font-size: 12px;
+      font-weight: 300;
+      font-style: italic;
+      white-space: pre-wrap;
+      color: $move-from-cat-text;
+    }
+  }
+  &__from-cat{
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-family: $main-font;
+    color: $move-from-cat-text;
+  }
+  &__to-cat{
+    display: block;
+    margin-top: 9px;
+    overflow: hidden;
+    font-size: 17px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-family: $main-font;
+    color: $move-to-cat-text;
+  }
+  &__amount{
+    font-size: 17px;
+    white-space: nowrap;
+    text-align: right;
+    font-family: $main-font;
+  }
+}

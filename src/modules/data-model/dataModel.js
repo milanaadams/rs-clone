@@ -15,6 +15,7 @@ export default class DataModel {
       newMove.cat_to = this.userCategories.find((cat) => cat.id === move.cat_to);
       return newMove;
     });
+    this.allMoves = data.user.allMoves;
     this.moves.offset = data.user.moves.offset;
   }
 

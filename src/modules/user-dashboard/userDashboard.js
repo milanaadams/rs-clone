@@ -4,6 +4,7 @@ import Abstract from '../abstract/abstract';
 import Categories from '../categories/categories';
 import locale from '../language/locale';
 import Chart from '../chart/chart';
+import Moves from '../moves/moves';
 
 export default class UserDashboard extends Abstract {
   constructor(lang, parent, headerInfo, dataModel) {
@@ -51,6 +52,7 @@ export default class UserDashboard extends Abstract {
     this.elements.dashboardRight = create('div', 'dashboard__right', null, this.elements.dashboard);
     this.incomeBlock = new Categories(this.lang, this.elements.dashboardLeft, this.dataModel);
     this.chartBlock = new Chart(this.langObj, this.elements.dashboardLeft, this.dataModel);
+    this.movesHistoryBlock = new Moves(this.lang, this.elements.dashboardRight, this.dataModel);
   }
 
   catchEvent(eventName) {

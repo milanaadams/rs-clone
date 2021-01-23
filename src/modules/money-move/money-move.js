@@ -141,4 +141,10 @@ export default class MoneyMove extends Abstract {
         .catch((errMsg) => { throw new Error(errMsg); });
     }
   }
+
+  catchEvent(eventName) {
+    if (this.evtArr.indexOf(eventName) === -1) {
+      throw new Error('Wrong custom event name.');
+    }
+  }
 }
