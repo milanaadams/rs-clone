@@ -26,12 +26,12 @@ export default class Moves {
         create('div', 'moves-history__transaction-comment', move.comment, dayBlockListItem);
         create('p', 'moves-history__from-cat', move.cat_from_ref.name, dayBlockTransactionCat);
         create('span', 'moves-history__to-cat', move.cat_to_ref.name, dayBlockTransactionCat);
-        const dayBlockAmount = create('p', 'moves-history__amount', `$${move.value}`, dayBlockTransactionAmount);
+        const dayBlockAmount = create('p', 'moves-history__amount', `$${parseFloat(move.value).toLocaleString(this.lang)}`, dayBlockTransactionAmount);
         if (move.cat_to_ref.type === 3) {
           dayBlockAmount.style.color = '#e53935';
           dayBlockAmount.prepend('- ');
         }
-        if(move.cat_from_ref.type === 1) {
+        if (move.cat_from_ref.type === 1) {
           dayBlockAmount.style.color = '#03a879';
           dayBlockAmount.prepend('+ ');
         }

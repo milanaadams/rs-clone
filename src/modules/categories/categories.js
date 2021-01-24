@@ -28,7 +28,7 @@ export default class Categories extends Abstract {
 
   loadBlocks() {
     this.dataModel.categories.forEach((block) => {
-      const totalBalance = this.getTotalAmount(block.id, 'summa');
+      const totalBalance = this.getTotalAmount(block.id, 'summa').toLocaleString(this.lang);
       const blockItem = create('div', 'block', null, this.parent);
       const blockHead = create('div', 'block__head', null, blockItem);
       const blockBody = create('div', 'block__body', null, blockItem);
@@ -45,7 +45,7 @@ export default class Categories extends Abstract {
 
       // Budget Plan
       if (block.allowPlan) {
-        const totalPlanBudget = this.getTotalAmount(block.id, 'plan');
+        const totalPlanBudget = this.getTotalAmount(block.id, 'plan').toLocaleString(this.lang);
         const blockStatsReceived = create('div', 'block__stats-item', null, blockStats);
         create('p', 'block__amount', `$${totalPlanBudget}`, blockStatsReceived);
         create('span', 'block__subtitle', locale[block.code].planAmount[this.lang], blockStatsReceived);
@@ -78,7 +78,7 @@ export default class Categories extends Abstract {
       create('h4', 'block__categories-title', item.name, categoryItem);
       const iconBg = create('div', 'block__categories-img', `<i class="material-icons block__categories-icon">${item.icoUrl}</i>`, categoryItem);
       const itemAmountInfo = create('div', 'block__categories-amount', null, categoryItem);
-      const itemSum = create('p', 'block__categories-amount-actual', `$${item.summa}`, itemAmountInfo);
+      const itemSum = create('p', 'block__categories-amount-actual', `$${parseFloat(item.summa, 10).toLocaleString(this.lang)}`, itemAmountInfo);
       if (currentCat.allowPlan) create('span', 'block__subtitle block__subtitle--centered', item.plan || 0, itemAmountInfo);
       if (item.type === 2) {
         iconBg.style.backgroundColor = '#fc0';
@@ -115,12 +115,12 @@ export default class Categories extends Abstract {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.userToken}`,
+          Authorization: `Bearer ${this.userToken}`,
         },
         body: JSON.stringify({
-          "userCat": {
-            "id": category.id,
-          }
+          userCat: {
+            id: category.id,
+          },
         }),
       })
         .then((response) => {
