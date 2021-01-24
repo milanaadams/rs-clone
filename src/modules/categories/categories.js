@@ -40,14 +40,14 @@ export default class Categories extends Abstract {
       const blockStats = create('div', 'block__stats', null, blockHead);
 
       const blockBalance = create('div', 'block__stats-item', null, blockStats);
-      create('p', 'block__amount', `$${totalBalance}`, blockBalance);
+      create('p', 'block__amount', `${totalBalance} ${locale.currency[this.lang]}`, blockBalance);
       create('span', 'block__subtitle', locale[block.code].totalAmount[this.lang], blockBalance);
 
       // Budget Plan
       if (block.allowPlan) {
         const totalPlanBudget = this.getTotalAmount(block.id, 'plan').toLocaleString(this.lang);
         const blockStatsReceived = create('div', 'block__stats-item', null, blockStats);
-        create('p', 'block__amount', `$${totalPlanBudget}`, blockStatsReceived);
+        create('p', 'block__amount', `${totalPlanBudget} ${locale.currency[this.lang]}`, blockStatsReceived);
         create('span', 'block__subtitle', locale[block.code].planAmount[this.lang], blockStatsReceived);
       }
 
@@ -78,7 +78,7 @@ export default class Categories extends Abstract {
       create('h4', 'block__categories-title', item.name, categoryItem);
       const iconBg = create('div', 'block__categories-img', `<i class="material-icons block__categories-icon">${item.icoUrl}</i>`, categoryItem);
       const itemAmountInfo = create('div', 'block__categories-amount', null, categoryItem);
-      const itemSum = create('p', 'block__categories-amount-actual', `$${parseFloat(item.summa, 10).toLocaleString(this.lang)}`, itemAmountInfo);
+      const itemSum = create('p', 'block__categories-amount-actual', `${parseFloat(item.summa, 10).toLocaleString(this.lang)} ${locale.currency[this.lang]}`, itemAmountInfo);
       if (currentCat.allowPlan) create('span', 'block__subtitle block__subtitle--centered', item.plan || 0, itemAmountInfo);
       if (item.type === 2) {
         iconBg.style.backgroundColor = '#fc0';
