@@ -231,7 +231,7 @@ export default class NewUserCategory extends Abstract {
           })
           .catch((errMsg) => { throw new Error(errMsg); });
       } else if (this.updateToCategory.type === 2) {
-        fetch(`${config.server}api/categories/update`, {
+        fetch(`${config.server}/api/categories/update`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
