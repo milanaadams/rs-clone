@@ -22,8 +22,8 @@ export default class MoneyMove extends Abstract {
     this.loadToAndFromCategories();
     const fragment = document.createDocumentFragment();
 
-    //const moveFrom = this.inputInfo.moveFrom ? this.inputInfo.moveFrom.name : '';
-    //const moveTo = this.inputInfo.moveTo ? this.inputInfo.moveTo.name : '';
+    // const moveFrom = this.inputInfo.moveFrom ? this.inputInfo.moveFrom.name : '';
+    // const moveTo = this.inputInfo.moveTo ? this.inputInfo.moveTo.name : '';
 
     this.elements.blockWrapper = create('div', 'move', null, fragment);
     this.elements.form = create('form', 'move-form', null, this.elements.blockWrapper);
@@ -47,6 +47,7 @@ export default class MoneyMove extends Abstract {
     this.elements.moveDateBlock = create('div', 'move-form__item', null, this.elements.form);
     create('label', 'move-form__label', locale.move.labelDate[this.lang], this.elements.moveDateBlock);
     this.elements.moveDate = create('input', 'move-form__input', null, this.elements.moveDateBlock, ['type', 'date']);
+    this.elements.moveDate.valueAsDate = new Date();
 
     this.elements.moveCommentBlock = create('div', 'move-form__item move-form__item--long', null, this.elements.form);
     create('label', 'move-form__label', locale.move.labelComment[this.lang], this.elements.moveCommentBlock);
