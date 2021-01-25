@@ -1,9 +1,12 @@
 import create from '../utils/create';
 import locale from '../language/locale';
 import generalPoperties from '../utils/general-properties';
+import config from '../../config';
+import Abstract from '../abstract/abstract';
 
-export default class Moves {
+export default class Moves extends Abstract {
   constructor(lang, parent, dataModel) {
+    super();
     this.lang = lang;
     this.dataModel = dataModel;
     this.parent = parent;
@@ -24,6 +27,8 @@ export default class Moves {
       let dayTotal = 0;
       this.dataModel.allMoves[item].forEach((move) => {
         const dayBlockListItem = create('li', 'moves-history__day-item', null, dayBlockList);
+        const categoryEdit = create('i', 'material-icons moves-history__day-item-update', 'edit', dayBlockListItem);
+        const categoryDelete = create('i', 'material-icons moves-history__day-item-update moves-history__day-item-delete', 'delete', dayBlockListItem);
         const dayBlockListItemBody = create('div', 'moves-history__transaction', null, dayBlockListItem);
         const dayBlockTransactionCat = create('div', 'moves-history__transaction-category', null, dayBlockListItemBody);
         const dayBlockTransactionAmount = create('div', 'moves-history__transaction-amount', null, dayBlockListItemBody);
@@ -41,6 +46,9 @@ export default class Moves {
           dayBlockAmount.prepend('+ ');
           dayTotal += parseFloat(move.value);
         }
+
+        categoryEdit.addEventListener('click', () => { this.updateCategory(item); });
+        categoryDelete.addEventListener('click', () => { this.deleteCategory(item); });
       });
       const dayBlockTotal = create('li', 'moves-history__day-item moves-history__total', null, dayBlockList);
       const dayBlockTotalAmount = create('div', 'moves-history__total-amount', null, dayBlockTotal);
@@ -53,5 +61,40 @@ export default class Moves {
         dayBlockTotalAmount.style.color = generalPoperties.negativeMark;
       } else dayBlockTotalAmount.textContent = `${dayTotal.toFixed(2)} ${locale.currency[this.lang]}`;
     });
+  }
+
+  deleteCategory(category) {
+    this.userToken = localStorage.getItem('userToken');
+
+    if (this.userToken) {
+      fetch(`${config.server}/api/moves/delete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.userToken}`,
+        },
+        body: JSON.stringify({
+          move: {
+            id: category.id,
+          },
+        }),
+      })
+        .then((response) => {
+          if (response.status !== 200) {
+            this.createCustomEvent('logOut');
+          } else {
+            response.json().then(() => {
+              this.createCustomEvent('userLoggedIn');
+            });
+          }
+        })
+        .catch((errMsg) => { throw new Error(errMsg); });
+    }
+  }
+
+  catchEvent(eventName) {
+    if (this.evtArr.indexOf(eventName) === -1) {
+      throw new Error('Wrong custom event name.');
+    }
   }
 }

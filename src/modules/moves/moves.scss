@@ -20,6 +20,7 @@
       box-shadow: 2px 2px 9px rgba(0,0,0,.13);
     }
     &-item{
+      position: relative;
       padding: 20px 20px 20px 50px;
       min-height: 80px;
       background-color: #fff;
@@ -28,6 +29,25 @@
       }
       &:not(:last-child){
         border-bottom: 1px solid rgba(222,220,220,.8);
+      }
+      &-update{
+        position: absolute;
+        top: 20px;
+        left: 15px;
+        font-size: 22px;
+        color: $block-subtitle-text;
+        cursor: pointer;
+        opacity: 0;
+        @include transition-primary;
+      }
+      &-delete{
+        top: auto;
+        bottom: 20px;
+      }
+      &:hover{
+        .moves-history__day-item-update{
+          opacity: 0.5;
+        }
       }
     }
   }
