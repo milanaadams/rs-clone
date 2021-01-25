@@ -99,7 +99,7 @@ export default class NewUserCategory extends Abstract {
       if (el.value === '') {
         if (this.elements.errorBlock) this.elements.errorBlock.remove();
         this.elements.errorBlock = create('div', 'error error--add');
-        create('span', 'error-text', 'This field should not be empty', this.elements.errorBlock);
+        create('span', 'error-text', locale.addNewSource.noEmptyFields[this.lang], this.elements.errorBlock);
         el.parentElement.appendChild(this.elements.errorBlock);
         el.parentElement.addEventListener('click', () => { this.elements.errorBlock.remove(); });
       }
@@ -123,10 +123,10 @@ export default class NewUserCategory extends Abstract {
       'commute', 'credit_card', 'done_all', 'eco', 'extension', 'face', 'favorite_border', 'flight_takeoff', 'grade',
       'important_devices', 'language', 'leaderboard', 'perm_identity', 'pets', 'settings_cell', 'settings_voice',
       'shopping_cart', 'tour', 'work_outline', 'airplay', 'business', 'chat', 'mail_outline', 'location_on'];
-    const iconBoard = create('div', 'icon-board', null, document.body);
-    const iconBoardInner = create('div', 'icon-board__inner', null, iconBoard);
+    this.iconBoard = create('div', 'icon-board', null, document.body);
+    const iconBoardInner = create('div', 'icon-board__inner', null, this.iconBoard);
 
-    iconBoard.addEventListener('mouseleave', () => { iconBoard.remove(); });
+    this.iconBoard.addEventListener('mouseleave', () => { this.iconBoard.remove(); });
 
     this.icons.forEach((icon) => {
       const iconItem = create('div', 'icon-board__item', null, iconBoardInner);
@@ -135,7 +135,7 @@ export default class NewUserCategory extends Abstract {
       iconItem.addEventListener('click', () => {
         this.elements.iconBtnImg.textContent = iconImg.textContent;
         this.icon = icon;
-        iconBoard.remove();
+        this.iconBoard.remove();
       });
     });
   }
@@ -261,8 +261,6 @@ export default class NewUserCategory extends Abstract {
   }
 
   catchEvent(eventName) {
-    if (this.evtArr.indexOf(eventName) === -1) {
-      throw new Error('Wrong custom event name.');
-    }
+    if (eventName.match(/removeIconBoard/)) if (this.iconBoard) this.iconBoard.remove();
   }
 }

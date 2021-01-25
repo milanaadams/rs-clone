@@ -5,6 +5,7 @@ import Categories from '../categories/categories';
 import locale from '../language/locale';
 import Chart from '../chart/chart';
 import Moves from '../moves/moves';
+import config from '../../config';
 
 export default class UserDashboard extends Abstract {
   constructor(lang, parent, headerInfo, dataModel) {
@@ -29,14 +30,39 @@ export default class UserDashboard extends Abstract {
     this.elements.dropdown = create('div', 'header__dropdown', null, this.headerInfo);
     this.elements.dropdownMenu = create('ul', 'header__dropdown-menu', null, this.elements.dropdown);
     const langSwitcher = create('li', 'header__dropdown-menu__item', this.langObj.loadLanguageSwitcher(), this.elements.dropdownMenu);
-    langSwitcher.addEventListener('click', () => { this.langObj.switchLanguage(); });
     this.elements.dropdownMenuEmail = create('li', 'header__dropdown-menu__item', this.dataModel.email, this.elements.dropdownMenu);
+    this.elements.populateData = create('li', 'header__dropdown-menu__item', locale.autoData[this.lang], this.elements.dropdownMenu);
     this.elements.logOut = create('li', 'header__dropdown-menu__item', locale.menu.logout[this.lang], this.elements.dropdownMenu);
 
     this.headerInfo.addEventListener('click', () => {
       this.elements.dropdown.classList.toggle('header__dropdown--active');
+      this.elements.dropdown.addEventListener('mouseleave', () => this.elements.dropdown.classList.remove('header__dropdown--active'));
+    });
+    this.elements.populateData.addEventListener('click', () => {
+      this.userToken = localStorage.getItem('userToken');
+
+      if (this.userToken) {
+        fetch(`${config.server}/api/user/dataGenerate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.userToken}`,
+          },
+        })
+          .then((response) => {
+            if (response.status !== 200) {
+              this.createCustomEvent('logOut');
+            } else {
+              response.json().then(() => {
+                this.createCustomEvent('userLoggedIn');
+              });
+            }
+          })
+          .catch((errMsg) => { throw new Error(errMsg); });
+      }
     });
 
+    this.elements.populateData.style.cursor = 'pointer';
     langSwitcher.style.cursor = 'pointer';
     this.elements.logOut.style.cursor = 'pointer';
     this.elements.logOut.addEventListener('click', () => {

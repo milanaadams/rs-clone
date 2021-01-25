@@ -22,9 +22,6 @@ export default class MoneyMove extends Abstract {
     this.loadToAndFromCategories();
     const fragment = document.createDocumentFragment();
 
-    // const moveFrom = this.inputInfo.moveFrom ? this.inputInfo.moveFrom.name : '';
-    // const moveTo = this.inputInfo.moveTo ? this.inputInfo.moveTo.name : '';
-
     this.elements.blockWrapper = create('div', 'move', null, fragment);
     this.elements.form = create('form', 'move-form', null, this.elements.blockWrapper);
 

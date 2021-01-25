@@ -1,4 +1,8 @@
 .moves-history{
+  overflow: scroll;
+  &::-webkit-scrollbar{
+    display: none
+  }
   &__day{
     &-head{
       margin-bottom: 12px;
@@ -16,7 +20,7 @@
       box-shadow: 2px 2px 9px rgba(0,0,0,.13);
     }
     &-item{
-      padding: 20px 50px;
+      padding: 20px 20px 20px 50px;
       min-height: 80px;
       background-color: #fff;
       &:first-child{
@@ -61,5 +65,26 @@
     white-space: nowrap;
     text-align: right;
     font-family: $main-font;
+  }
+  &__no-moves{
+    text-transform: uppercase;
+    text-align: center;
+  }
+  &__total{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+  }
+  &__total{
+    background-color: $accent-background-color;
+    text-align: right;
+    &-title{
+      margin-top: 5px;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+    &-amount{
+      font-size: 20px;
+    }
   }
 }

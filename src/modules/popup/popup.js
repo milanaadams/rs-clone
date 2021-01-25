@@ -1,7 +1,9 @@
 import create from '../utils/create';
+import Abstract from '../abstract/abstract';
 
-export default class Popup {
+export default class Popup extends Abstract {
   constructor(parent, content) {
+    super();
     this.parent = parent;
     this.content = content;
     this.elements = {};
@@ -24,5 +26,12 @@ export default class Popup {
     document.body.classList.remove('lock');
     this.elements.popup.remove();
     this.elements.blackOut.remove();
+    this.createCustomEvent('removeIconBoard');
+  }
+
+  catchEvent(eventName) {
+    if (this.evtArr.indexOf(eventName) === -1) {
+      throw new Error('Wrong custom event name.');
+    }
   }
 }

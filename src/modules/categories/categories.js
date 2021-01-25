@@ -7,11 +7,7 @@ import config from '../../config';
 
 function getCurrentMonth(lang) {
   const currentDate = new Date();
-  const monthNames = {
-    en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-    ru: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-  };
-  return `${monthNames[lang][currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+  return `${locale.months[lang][currentDate.getMonth()]} ${currentDate.getFullYear()}`;
 }
 
 export default class Categories extends Abstract {
@@ -78,7 +74,7 @@ export default class Categories extends Abstract {
       create('h4', 'block__categories-title', item.name, categoryItem);
       const iconBg = create('div', 'block__categories-img', `<i class="material-icons block__categories-icon">${item.icoUrl}</i>`, categoryItem);
       const itemAmountInfo = create('div', 'block__categories-amount', null, categoryItem);
-      const itemSum = create('p', 'block__categories-amount-actual', `${parseFloat(item.summa, 10).toLocaleString(this.lang)} ${locale.currency[this.lang]}`, itemAmountInfo);
+      const itemSum = create('p', 'block__categories-amount-actual', `${parseFloat(item.summa).toLocaleString(this.lang)} ${locale.currency[this.lang]}`, itemAmountInfo);
       if (currentCat.allowPlan) create('span', 'block__subtitle block__subtitle--centered', item.plan || 0, itemAmountInfo);
       if (item.type === 2) {
         iconBg.style.backgroundColor = '#fc0';
@@ -99,6 +95,23 @@ export default class Categories extends Abstract {
     });
     const categoryItemAdd = create('div', 'block__categories-item block__categories-item--add', null, blockCategories);
     create('div', 'block__categories-img block__categories-img--add', '<i class="material-icons block__categories-icon">add</i>', categoryItemAdd);
+
+
+
+    function seeMoreLess(block) {
+      for (let i = 8; i < block.children.length; i += 1) {
+        block.children[i].classList.toggle('block__categories-item--hidden');
+      }
+    }
+
+    if (blockCategories.children.length > 8) {
+      seeMoreLess(blockCategories);
+      const openCloseArrow = create('i', 'material-icons block__categories-item-openClose', 'keyboard_arrow_down', parent);
+      openCloseArrow.addEventListener('click', () => {
+        openCloseArrow.classList.toggle('block__categories-item-openClose--up');
+        seeMoreLess(blockCategories);
+      });
+    }
 
     categoryItemAdd.addEventListener('click', () => { this.popUp = new NewUserCategory(this.lang, currentCat.id); });
   }
