@@ -3,6 +3,7 @@ import locale from '../language/locale';
 import generalPoperties from '../utils/general-properties';
 import config from '../../config';
 import Abstract from '../abstract/abstract';
+import MovesUpdate from './moves-update';
 
 export default class Moves extends Abstract {
   constructor(lang, parent, dataModel) {
@@ -47,7 +48,7 @@ export default class Moves extends Abstract {
           dayTotal += parseFloat(move.value);
         }
 
-        categoryEdit.addEventListener('click', () => { this.updateCategory(item); });
+        categoryEdit.addEventListener('click', () => { this.popUp = new MovesUpdate(this.lang, move); });
         categoryDelete.addEventListener('click', () => { this.deleteCategory(item); });
       });
       const dayBlockTotal = create('li', 'moves-history__day-item moves-history__total', null, dayBlockList);
@@ -81,7 +82,8 @@ export default class Moves extends Abstract {
       })
         .then((response) => {
           if (response.status !== 200) {
-            this.createCustomEvent('logOut');
+            //this.createCustomEvent('logOut');
+            console.log('unsuccessful');
           } else {
             response.json().then(() => {
               this.createCustomEvent('userLoggedIn');

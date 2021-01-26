@@ -50,7 +50,7 @@ export default class MoneyMove extends Abstract {
     create('label', 'move-form__label', locale.move.labelComment[this.lang], this.elements.moveCommentBlock);
     this.elements.moveComment = create('input', 'move-form__input', null, this.elements.moveCommentBlock, ['type', 'text']);
 
-    this.elements.formBtn = create('div', 'move-form__btn', 'submit', this.elements.form);
+    this.elements.formBtn = create('div', 'move-form__btn', locale.move.submitBtn[this.lang], this.elements.form);
 
     this.elements.formBtn.addEventListener('click', () => {
       this.processForm();

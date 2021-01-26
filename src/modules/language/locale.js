@@ -254,6 +254,12 @@ const locale = {
       ru: 'Комментарий',
       bel: 'Каментар',
     },
+
+    submitBtn: {
+      en: 'Submit',
+      ru: 'Отправить',
+      bel: 'Адправіць ',
+    },
   },
 
   chart: {
