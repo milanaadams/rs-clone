@@ -5,18 +5,17 @@ import config from '../../config';
 import Abstract from '../abstract/abstract';
 
 export default class MovesUpdate extends Abstract {
-  constructor(lang, move) {
+  constructor(lang, move, movesDataObj) {
     super();
     this.lang = lang;
     this.move = move;
     this.elements = {};
+    this.movesDataObj = movesDataObj;
 
     this.loadMoveUpdateForm();
   }
 
   loadMoveUpdateForm() {
-    console.log(this.move);
-
     this.fragment = document.createDocumentFragment();
 
     this.elements.blockWrapper = create('div', 'move', null, this.fragment);
@@ -88,8 +87,12 @@ export default class MovesUpdate extends Abstract {
             this.popup.closePopup();
           } else {
             response.json().then(() => {
-              this.createCustomEvent('userLoggedIn');
+              this.createCustomEvent('updateDataModel');
               this.popup.closePopup();
+            }).then(() => {
+              setTimeout(() => {
+                this.createCustomEvent('updateMovesBlock');
+              }, 2000);
             });
           }
         })

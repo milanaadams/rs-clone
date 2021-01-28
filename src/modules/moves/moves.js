@@ -12,6 +12,7 @@ export default class Moves extends Abstract {
     this.dataModel = dataModel;
     this.parent = parent;
     this.elements = {};
+    this.moves = [];
     this.loadMovesHistory();
   }
 
@@ -48,8 +49,14 @@ export default class Moves extends Abstract {
           dayTotal += parseFloat(move.value);
         }
 
-        categoryEdit.addEventListener('click', () => { this.popUp = new MovesUpdate(this.lang, move); });
-        categoryDelete.addEventListener('click', () => { this.deleteCategory(item); });
+        const currentMove = {
+          element: dayBlockListItem,
+          info: move,
+        };
+        this.moves.push(currentMove);
+
+        categoryEdit.addEventListener('click', () => { this.popUp = new MovesUpdate(this.lang, move, this.moves); });
+        categoryDelete.addEventListener('click', () => { this.deleteCategory(move); });
       });
       const dayBlockTotal = create('li', 'moves-history__day-item moves-history__total', null, dayBlockList);
       const dayBlockTotalAmount = create('div', 'moves-history__total-amount', null, dayBlockTotal);
@@ -82,11 +89,16 @@ export default class Moves extends Abstract {
       })
         .then((response) => {
           if (response.status !== 200) {
-            //this.createCustomEvent('logOut');
-            console.log('unsuccessful');
+            this.createCustomEvent('logOut');
           } else {
-            response.json().then(() => {
-              this.createCustomEvent('userLoggedIn');
+            response.json().then((data) => {
+              this.createCustomEvent('updateDataModel');
+              const currentMoveInd = this.moves.findIndex((move) => move.info.id === data.move);
+              this.moves.splice(currentMoveInd, 1);
+            }).then(() => {
+              setTimeout(() => {
+                this.createCustomEvent('updateMovesBlock');
+              }, 2000);
             });
           }
         })
@@ -94,9 +106,15 @@ export default class Moves extends Abstract {
     }
   }
 
+  updateMovesBlock() {
+    this.elements.container.remove();
+    this.elements = {};
+    this.moves = [];
+
+    this.loadMovesHistory();
+  }
+
   catchEvent(eventName) {
-    if (this.evtArr.indexOf(eventName) === -1) {
-      throw new Error('Wrong custom event name.');
-    }
+    if (eventName.match(/updateMovesBlock/)) this.updateMovesBlock();
   }
 }
