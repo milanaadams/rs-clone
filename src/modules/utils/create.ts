@@ -1,5 +1,9 @@
-export default function create(el, classNames, child, parent, ...dataAttr) {
-  let element = null;
+export default function create(el: string,
+  classNames: string,
+  child: any,
+  parent: null|HTMLElement,
+  ...dataAttr: [string, string]): HTMLElement {
+  let element: HTMLElement;
   try {
     element = document.createElement(el);
   } catch (e) {
@@ -35,7 +39,9 @@ export default function create(el, classNames, child, parent, ...dataAttr) {
       try {
         if (attrValue === '') {
           element.setAttribute(attrName, '');
-        } else if (attrName && attrName.toString().match(/value|href|target|style|type|for|id|placeholder|cols|rows|autocorrect|spellcheck|src|name/)) {
+        } else if (attrName && attrName
+          .toString()
+          .match(/value|href|target|style|type|for|id|placeholder|cols|rows|autocorrect|spellcheck|src|name/)) {
           element.setAttribute(attrName, attrValue);
         } else if (attrName) {
           element.dataset[attrName] = attrValue;

@@ -4,14 +4,27 @@ import NewUserCategory from './newUserCategory';
 import Abstract from '../abstract/abstract';
 import MoneyMove from '../money-move/money-move';
 import config from '../../config';
+import DataModel from '../data-model/dataModel';
 
-function getCurrentMonth(lang) {
+function getCurrentMonth(lang: string): string {
   const currentDate = new Date();
   return `${locale.months[lang][currentDate.getMonth()]} ${currentDate.getFullYear()}`;
 }
 
 export default class Categories extends Abstract {
-  constructor(lang, parent, dataModel) {
+  parent: HTMLElement;
+
+  dataModel: DataModel;
+
+  elements: any;
+
+  received: number;
+
+  budget: number;
+
+  lang: string;
+
+  constructor(lang: string, parent: HTMLElement, dataModel: DataModel) {
     super();
     this.parent = parent;
     this.dataModel = dataModel;
@@ -22,7 +35,7 @@ export default class Categories extends Abstract {
     this.loadBlocks();
   }
 
-  loadBlocks() {
+  loadBlocks(): void {
     this.dataModel.categories.forEach((block) => {
       const totalBalance = this.getTotalAmount(block.id, 'summa').toLocaleString(this.lang);
       const blockItem = create('div', 'block', null, this.parent);
@@ -51,7 +64,7 @@ export default class Categories extends Abstract {
     });
   }
 
-  getTotalAmount(catType, field) {
+  getTotalAmount(catType, field): number {
     let amount = 0;
     this.dataModel.userCategories.forEach((key) => {
       if (key.type === catType) {
@@ -61,7 +74,7 @@ export default class Categories extends Abstract {
     return amount;
   }
 
-  loadCategories(currentCat, parent) {
+  loadCategories(currentCat, parent): void {
     const currentUserCategories = [];
     this.dataModel.userCategories.forEach((category) => {
       if (category.type === currentCat.id) currentUserCategories.push(category);
@@ -96,8 +109,6 @@ export default class Categories extends Abstract {
     const categoryItemAdd = create('div', 'block__categories-item block__categories-item--add', null, blockCategories);
     create('div', 'block__categories-img block__categories-img--add', '<i class="material-icons block__categories-icon">add</i>', categoryItemAdd);
 
-
-
     function seeMoreLess(block) {
       for (let i = 8; i < block.children.length; i += 1) {
         block.children[i].classList.toggle('block__categories-item--hidden');
@@ -116,7 +127,7 @@ export default class Categories extends Abstract {
     categoryItemAdd.addEventListener('click', () => { this.popUp = new NewUserCategory(this.lang, currentCat.id); });
   }
 
-  updateCategory(category) {
+  updateCategory(category): void {
     this.popUp = new NewUserCategory(this.lang, category.type, category);
   }
 

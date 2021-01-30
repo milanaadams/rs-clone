@@ -3,8 +3,13 @@ module.exports = {
     browser: true,
     es2021: true,
   },
+  plugins: [
+    "@typescript-eslint",
+  ],
   extends: [
-    'airbnb-typescript',
+    "airbnb-typescript/base",
+    "plugin:@typescript-eslint/recommended",
+
   ],
   parserOptions: {
     ecmaVersion: 12,
@@ -13,5 +18,6 @@ module.exports = {
   },
   rules: {
   'linebreak-style': ['error', 'windows'],
+  'max-len': ["error", { "code": 140 }]
   }
 };

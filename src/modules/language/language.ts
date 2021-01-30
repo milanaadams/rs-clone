@@ -1,14 +1,18 @@
+/* eslint-disable @typescript-eslint/lines-between-class-members */
 import Abstract from '../abstract/abstract';
 import create from '../utils/create';
 
 export default class Language extends Abstract {
+  locale: string[];
+  language: string;
+
   constructor() {
     super();
     this.locale = ['en', 'ru', 'bel'];
     [this.language] = [this.locale[0]];
   }
 
-  switchLanguage(langToSwitch) {
+  switchLanguage(langToSwitch: number): void {
     /* if (this.language === this.locale[0]) {
       [this.language] = [this.locale[1]];
     } else {
@@ -18,7 +22,7 @@ export default class Language extends Abstract {
     this.createCustomEvent('changeLang');
   }
 
-  loadLanguageSwitcher() {
+  loadLanguageSwitcher(): DocumentFragment {
     /* if (this.language === this.locale[0]) return 'Switch to Russian';
     return 'Switch to English'; */
     const fragment = document.createDocumentFragment();
