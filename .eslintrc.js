@@ -4,12 +4,14 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    'airbnb-base',
+    'airbnb-typescript',
   ],
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
+    project: './tsconfig.json',
   },
   rules: {
-  },
+  'linebreak-style': ['error', 'windows'],
+  }
 };
