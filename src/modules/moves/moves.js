@@ -63,11 +63,11 @@ export default class Moves extends Abstract {
       create('span', 'moves-history__total-title', locale.moves.total[this.lang], dayBlockTotal);
 
       if (dayTotal > 0) {
-        dayBlockTotalAmount.textContent = `+ ${dayTotal.toFixed(2)} ${locale.currency[this.lang]}`; dayBlockTotalAmount.style.color = generalPoperties.positiveMark;
+        dayBlockTotalAmount.textContent = `+ ${dayTotal.toLocaleString(this.lang)} ${locale.currency[this.lang]}`; dayBlockTotalAmount.style.color = generalPoperties.positiveMark;
       } else if (dayTotal < 0) {
-        dayBlockTotalAmount.textContent = `- ${dayTotal.toFixed(2) * -1} ${locale.currency[this.lang]}`;
+        dayBlockTotalAmount.textContent = `- ${(dayTotal * -1).toLocaleString(this.lang)} ${locale.currency[this.lang]}`;
         dayBlockTotalAmount.style.color = generalPoperties.negativeMark;
-      } else dayBlockTotalAmount.textContent = `${dayTotal.toFixed(2)} ${locale.currency[this.lang]}`;
+      } else dayBlockTotalAmount.textContent = `${dayTotal.toLocaleString(this.lang)} ${locale.currency[this.lang]}`;
     });
   }
 
