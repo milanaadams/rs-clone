@@ -51,6 +51,7 @@ export default class Main extends Abstract {
     removeChildren(this.elements.headerRight);
     this.userToken = localStorage.getItem('userToken');
     if (this.userToken) {
+      this.elements.loader = create('div', 'loader', null, this.elements.mainInner);
       fetch(`${config.server}/api/user/getInfo`, {
         method: 'POST',
         headers: {
@@ -59,6 +60,7 @@ export default class Main extends Abstract {
         },
       })
         .then((response) => {
+          this.elements.loader.remove();
           if (response.status !== 200) {
             this.userToken = null;
             localStorage.removeItem('userToken');
