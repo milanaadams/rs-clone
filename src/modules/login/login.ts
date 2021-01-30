@@ -10,6 +10,8 @@ export default class Login extends Abstract {
   login: boolean;
   elements: any;
   lang: string;
+  token?: string;
+  registerError?: HTMLElement;
 
   constructor(lang: string, parent: HTMLElement) {
     super();
@@ -101,12 +103,14 @@ export default class Login extends Abstract {
     });
     if (args.some((el) => el.value === '')) return;
 
-    if (this.login) this.logInUser(...args);
-    else this.registerUser(...args);
+    const [userEmail, userPass, userName] = [...args];
+    if (this.login) this.logInUser(userEmail, userPass);
+    else this.registerUser(userEmail, userPass, userName);
   }
 
-  removeErrorMsg(input): void {
-    if (input.parentElement.children.length === 3) input.parentElement.children[2].remove();
+  removeErrorMsg(input: HTMLElement): void {
+    if (input && input.parentElement
+       && input.parentElement.children.length === 3) input.parentElement.children[2].remove();
   }
 
   switchForm(): void {
@@ -141,7 +145,9 @@ export default class Login extends Abstract {
       .catch((errMsg) => { throw new Error(errMsg); });
   }
 
-  registerUser(userEmail, userPass, userName) {
+  registerUser(userEmail: HTMLInputElement,
+    userPass: HTMLInputElement,
+    userName: HTMLInputElement): void {
     fetch(`${config.server}/api/registration`, {
       method: 'POST',
       headers: {
@@ -164,7 +170,7 @@ export default class Login extends Abstract {
       .catch((errMsg) => { throw new Error(errMsg); });
   }
 
-  showRegisteredSuccessfullyMsg() {
+  showRegisteredSuccessfullyMsg(): void {
     while (this.parent.children.length > 0) this.parent.children[0].remove();
     create('div', 'registration-success', 'You have successfully registered!', this.parent);
     setTimeout(() => {
@@ -173,7 +179,7 @@ export default class Login extends Abstract {
     }, 3000);
   }
 
-  catchEvent(eventName) {
+  catchEvent(eventName: string): void {
     if (this.evtArr.indexOf(eventName) === -1) {
       throw new Error('Wrong custom event name.');
     }

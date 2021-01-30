@@ -1,5 +1,5 @@
 export default function create(el: string,
-  classNames: string,
+  classNames: string|null,
   child: any|null = null,
   parent: null|HTMLElement|DocumentFragment = null,
   ...dataAttr: any|null): HTMLElement {
