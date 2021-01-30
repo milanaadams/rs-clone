@@ -34,7 +34,7 @@ export default class Language extends Abstract {
     return fragment;
   }
 
-  catchEvent(eventName) {
+  catchEvent(eventName: string): void {
     if (this.evtArr.indexOf(eventName) === -1) {
       throw new Error('Wrong custom event name.');
     }

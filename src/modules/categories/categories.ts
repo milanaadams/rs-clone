@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/lines-between-class-members */
 import create from '../utils/create';
 import locale from '../language/locale';
 import NewUserCategory from './newUserCategory';
@@ -13,15 +14,10 @@ function getCurrentMonth(lang: string): string {
 
 export default class Categories extends Abstract {
   parent: HTMLElement;
-
   dataModel: DataModel;
-
   elements: any;
-
   received: number;
-
   budget: number;
-
   lang: string;
 
   constructor(lang: string, parent: HTMLElement, dataModel: DataModel) {
