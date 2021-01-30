@@ -1,6 +1,13 @@
 .chart-select{
-  font-size: 20px;
+  font-size: 14px;
   text-transform: uppercase;
   border: none;
   color: $chart-title;
+  &:focus{
+    outline: none;
+  }
+}
+
+.canvasBox{
+  padding-bottom: 30px;
 }

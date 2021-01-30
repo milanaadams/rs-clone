@@ -103,6 +103,36 @@
           background-color: $background-color;
         }
       }
+      &__language{
+        position: relative;
+        margin-right: 7px;
+        cursor: pointer;
+        &::after {
+          content: "";
+          width: 0;
+          height: 1px;
+          background: $main-text-color;
+          left: 0px;
+          bottom: -2px;
+          position: absolute;
+          transition: 0.6s ease;
+        }
+        &:last-child{
+          margin-right: 0;
+        }
+        &:hover::after {
+          content: "";
+          width: 70%;                
+        }
+        &--active{
+          color: $main-accent-color;
+          cursor: default;
+          &:hover::after {
+            content: "";
+            width: 0;                
+          }
+        }
+      }
     }
     &--active{
       display: block;

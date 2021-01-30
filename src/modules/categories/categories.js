@@ -3,14 +3,11 @@ import locale from '../language/locale';
 import NewUserCategory from './newUserCategory';
 import Abstract from '../abstract/abstract';
 import MoneyMove from '../money-move/money-move';
+import config from '../../config';
 
 function getCurrentMonth(lang) {
   const currentDate = new Date();
-  const monthNames = {
-    en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-    ru: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-  };
-  return `${monthNames[lang][currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+  return `${locale.months[lang][currentDate.getMonth()]} ${currentDate.getFullYear()}`;
 }
 
 export default class Categories extends Abstract {
@@ -27,7 +24,7 @@ export default class Categories extends Abstract {
 
   loadBlocks() {
     this.dataModel.categories.forEach((block) => {
-      const totalBalance = this.getTotalAmount(block.id, 'summa');
+      const totalBalance = this.getTotalAmount(block.id, 'summa').toLocaleString(this.lang);
       const blockItem = create('div', 'block', null, this.parent);
       const blockHead = create('div', 'block__head', null, blockItem);
       const blockBody = create('div', 'block__body', null, blockItem);
@@ -39,14 +36,14 @@ export default class Categories extends Abstract {
       const blockStats = create('div', 'block__stats', null, blockHead);
 
       const blockBalance = create('div', 'block__stats-item', null, blockStats);
-      create('p', 'block__amount', `$${totalBalance}`, blockBalance);
+      create('p', 'block__amount', `${totalBalance} ${locale.currency[this.lang]}`, blockBalance);
       create('span', 'block__subtitle', locale[block.code].totalAmount[this.lang], blockBalance);
 
       // Budget Plan
       if (block.allowPlan) {
-        const totalPlanBudget = this.getTotalAmount(block.id, 'plan');
+        const totalPlanBudget = this.getTotalAmount(block.id, 'plan').toLocaleString(this.lang);
         const blockStatsReceived = create('div', 'block__stats-item', null, blockStats);
-        create('p', 'block__amount', `$${totalPlanBudget}`, blockStatsReceived);
+        create('p', 'block__amount', `${totalPlanBudget} ${locale.currency[this.lang]}`, blockStatsReceived);
         create('span', 'block__subtitle', locale[block.code].planAmount[this.lang], blockStatsReceived);
       }
 
@@ -77,15 +74,20 @@ export default class Categories extends Abstract {
       create('h4', 'block__categories-title', item.name, categoryItem);
       const iconBg = create('div', 'block__categories-img', `<i class="material-icons block__categories-icon">${item.icoUrl}</i>`, categoryItem);
       const itemAmountInfo = create('div', 'block__categories-amount', null, categoryItem);
-      const itemSum = create('p', 'block__categories-amount-actual', `$${item.summa}`, itemAmountInfo);
+      const itemSum = create('p', 'block__categories-amount-actual', `${parseFloat(item.summa).toLocaleString(this.lang)} ${locale.currency[this.lang]}`, itemAmountInfo);
       if (currentCat.allowPlan) create('span', 'block__subtitle block__subtitle--centered', item.plan || 0, itemAmountInfo);
       if (item.type === 2) {
         iconBg.style.backgroundColor = '#fc0';
         itemSum.style.color = '#f9a825';
       }
       if (item.type === 3) {
-        iconBg.style.backgroundColor = '#c1c5c9';
-        itemSum.style.color = '#0ac38e';
+        if (item.summa > item.plan) {
+          iconBg.style.backgroundColor = '#e53935';
+          itemSum.style.color = '#e53935';
+        } else {
+          iconBg.style.backgroundColor = '#c1c5c9';
+          itemSum.style.color = '#0ac38e';
+        }
       }
       categoryEdit.addEventListener('click', () => { this.updateCategory(item); });
       categoryDelete.addEventListener('click', () => { this.deleteCategory(item); });
@@ -93,6 +95,23 @@ export default class Categories extends Abstract {
     });
     const categoryItemAdd = create('div', 'block__categories-item block__categories-item--add', null, blockCategories);
     create('div', 'block__categories-img block__categories-img--add', '<i class="material-icons block__categories-icon">add</i>', categoryItemAdd);
+
+
+
+    function seeMoreLess(block) {
+      for (let i = 8; i < block.children.length; i += 1) {
+        block.children[i].classList.toggle('block__categories-item--hidden');
+      }
+    }
+
+    if (blockCategories.children.length > 8) {
+      seeMoreLess(blockCategories);
+      const openCloseArrow = create('i', 'material-icons block__categories-item-openClose', 'keyboard_arrow_down', parent);
+      openCloseArrow.addEventListener('click', () => {
+        openCloseArrow.classList.toggle('block__categories-item-openClose--up');
+        seeMoreLess(blockCategories);
+      });
+    }
 
     categoryItemAdd.addEventListener('click', () => { this.popUp = new NewUserCategory(this.lang, currentCat.id); });
   }
@@ -105,16 +124,16 @@ export default class Categories extends Abstract {
     this.userToken = localStorage.getItem('userToken');
 
     if (this.userToken) {
-      fetch('https://f19m-rsclone-back.herokuapp.com/api/categories/delete', {
+      fetch(`${config.server}/api/categories/delete`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.userToken}`,
+          Authorization: `Bearer ${this.userToken}`,
         },
         body: JSON.stringify({
-          "userCat": {
-            "id": category.id,
-          }
+          userCat: {
+            id: category.id,
+          },
         }),
       })
         .then((response) => {

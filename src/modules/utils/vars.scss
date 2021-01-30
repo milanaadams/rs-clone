@@ -1,6 +1,7 @@
 $background-color: #efefec;
 $input-bg-color: rgb(255, 255, 255);
 $input-bg-color--active: rgb(247, 248, 250);
+$accent-background-color: #f9f9f9;
 
 $main-light-color: #fff;
 $main-accent-color: #04b784;
@@ -13,6 +14,8 @@ $block-title-text: #797878;
 $block-subtitle-text: #9A9898;
 $categories-title: #4f4f4f;
 $chart-title: #404040;
+$move-from-cat-text: #7b7a7a;
+$move-to-cat-text: #000;
 
 $income-bg-color: #0a93d1;
 $accounts-bg-color: #fc0;
@@ -28,3 +31,7 @@ $border-input-color: #dedcdc;
 }
 
 $main-font: 'Roboto', sans-serif;
+
+$mediaquery-medium: 992px;
+$mediaquery-mobile-large: 768px;
+$mediaquery-mobile-medium: 600px;

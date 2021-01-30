@@ -1,0 +1,110 @@
+.moves-history{
+  overflow: scroll;
+  &::-webkit-scrollbar{
+    display: none
+  }
+  &__day{
+    &-head{
+      margin-bottom: 12px;
+      font-size: 21px;
+      color: $block-title-text;
+      text-align: left;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+    &-list{
+      list-style-type: none;
+      margin-bottom: 20px;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 2px 2px 9px rgba(0,0,0,.13);
+    }
+    &-item{
+      position: relative;
+      padding: 20px 20px 20px 50px;
+      min-height: 80px;
+      background-color: #fff;
+      &:first-child{
+        border-radius: 4px 4px 0 0;
+      }
+      &:not(:last-child){
+        border-bottom: 1px solid rgba(222,220,220,.8);
+      }
+      &-update{
+        position: absolute;
+        top: 20px;
+        left: 15px;
+        font-size: 22px;
+        color: $block-subtitle-text;
+        cursor: pointer;
+        opacity: 0;
+        @include transition-primary;
+      }
+      &-delete{
+        top: auto;
+        bottom: 20px;
+      }
+      &:hover{
+        .moves-history__day-item-update{
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+  &__transaction{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    &-comment{
+      font-size: 12px;
+      font-weight: 300;
+      font-style: italic;
+      white-space: pre-wrap;
+      color: $move-from-cat-text;
+    }
+  }
+  &__from-cat{
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-family: $main-font;
+    color: $move-from-cat-text;
+  }
+  &__to-cat{
+    display: block;
+    margin-top: 9px;
+    overflow: hidden;
+    font-size: 17px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-family: $main-font;
+    color: $move-to-cat-text;
+  }
+  &__amount{
+    font-size: 17px;
+    white-space: nowrap;
+    text-align: right;
+    font-family: $main-font;
+  }
+  &__no-moves{
+    text-transform: uppercase;
+    text-align: center;
+  }
+  &__total{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+  }
+  &__total{
+    background-color: $accent-background-color;
+    text-align: right;
+    &-title{
+      margin-top: 5px;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+    &-amount{
+      font-size: 20px;
+    }
+  }
+}

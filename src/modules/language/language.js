@@ -1,24 +1,33 @@
 import Abstract from '../abstract/abstract';
+import create from '../utils/create';
 
 export default class Language extends Abstract {
   constructor() {
     super();
-    this.locale = ['en', 'ru'];
+    this.locale = ['en', 'ru', 'bel'];
     [this.language] = [this.locale[0]];
   }
 
-  switchLanguage() {
-    if (this.language === this.locale[0]) {
+  switchLanguage(langToSwitch) {
+    /* if (this.language === this.locale[0]) {
       [this.language] = [this.locale[1]];
     } else {
       [this.language] = [this.locale[0]];
-    }
+    } */
+    this.language = this.locale[langToSwitch];
     this.createCustomEvent('changeLang');
   }
 
   loadLanguageSwitcher() {
-    if (this.language === this.locale[0]) return 'Switch to Russian';
-    return 'Switch to English';
+    /* if (this.language === this.locale[0]) return 'Switch to Russian';
+    return 'Switch to English'; */
+    const fragment = document.createDocumentFragment();
+    this.locale.forEach((lang, index) => {
+      const langItem = create('span', 'header__dropdown-menu__language', lang.toUpperCase(), fragment);
+      if (lang === this.language) langItem.classList.add('header__dropdown-menu__language--active');
+      else langItem.addEventListener('click', () => { this.switchLanguage(index); });
+    });
+    return fragment;
   }
 
   catchEvent(eventName) {
