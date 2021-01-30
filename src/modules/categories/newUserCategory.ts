@@ -5,10 +5,7 @@ import Popup from '../popup/popup';
 import Abstract from '../abstract/abstract';
 import config from '../../config';
 // ts
-import {
-  Dictionary, Category, UserToken,
-  UserCategory,
-} from '../../types/typings';
+import { Dictionary, UserCategory } from '../../types/typings';
 
 export default class NewUserCategory extends Abstract {
   catId: number;
@@ -21,7 +18,7 @@ export default class NewUserCategory extends Abstract {
   itemName?: string;
   itemAmount?: string;
   icons?: Array<string>;
-  iconBoard: HTMLElement;
+  iconBoard?: HTMLElement;
 
   constructor(lang: string, catId: number, ...args: any[]) {
     super();
@@ -33,7 +30,7 @@ export default class NewUserCategory extends Abstract {
     this.loadForm();
   }
 
-  loadForm() {
+  loadForm(): void {
     const fragment = document.createDocumentFragment();
 
     this.elements.addItemBlock = create('div', 'add-item', null, fragment);
@@ -138,7 +135,7 @@ export default class NewUserCategory extends Abstract {
     }
   }
 
-  selectIcon() {
+  selectIcon(): void {
     this.icons = ['home', 'savings', 'account_balance_wallet', 'account_balance', 'local_grocery_store',
       'vpn_key', 'restaurant', 'subway', 'add_shopping_cart', 'audiotrack', 'cleaning_services',
       'account_box', 'alarm', 'analytics', 'anchor', 'api', 'article', 'arrow_right_alt', 'autorenew',
@@ -149,7 +146,7 @@ export default class NewUserCategory extends Abstract {
     this.iconBoard = create('div', 'icon-board', null, document.body);
     const iconBoardInner = create('div', 'icon-board__inner', null, this.iconBoard);
 
-    this.iconBoard.addEventListener('mouseleave', () => { this.iconBoard.remove(); });
+    this.iconBoard.addEventListener('mouseleave', () => { if (this.iconBoard) this.iconBoard.remove(); });
 
     this.icons.forEach((icon) => {
       const iconItem = create('div', 'icon-board__item', null, iconBoardInner);
@@ -158,12 +155,12 @@ export default class NewUserCategory extends Abstract {
       iconItem.addEventListener('click', () => {
         this.elements.iconBtnImg.textContent = iconImg.textContent;
         this.icon = icon;
-        this.iconBoard.remove();
+        if (this.iconBoard) this.iconBoard.remove();
       });
     });
   }
 
-  sendToServer() {
+  sendToServer(): void {
     const userToken = localStorage.getItem('userToken');
 
     if (userToken) {
@@ -223,7 +220,7 @@ export default class NewUserCategory extends Abstract {
     }
   }
 
-  sendUpdate() {
+  sendUpdate(): void {
     const userToken = localStorage.getItem('userToken');
 
     if (userToken) {
