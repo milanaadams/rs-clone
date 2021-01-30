@@ -8,9 +8,10 @@ import UserDashboard from '../user-dashboard/userDashboard';
 import removeChildren from '../utils/removeAllChildren';
 import config from '../../config';
 import Language from '../language/language';
+import { UserToken as UserTokenType } from '../../types/typings';
 
 export default class Main extends Abstract {
-  userToken: string|null;
+  userToken: UserTokenType;
   elements: any;
   lang: Language;
   currentLang: string;

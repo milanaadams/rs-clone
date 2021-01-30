@@ -1,4 +1,7 @@
+export type Dictionary<T> = { [key: string]: T };
+
 export interface UserCategory {
+  entries<T extends { [key: string]: any }, K extends keyof T>(o: T): [keyof T, T[K]][];
   id: number;
   name: string;
   type: number;
@@ -6,6 +9,8 @@ export interface UserCategory {
   summa: number;
   icoUrl: string;
 }
+export type UserCategoryKeys = keyof UserCategory;
+
 export interface Tag {
   id: number;
   name: string;
@@ -56,8 +61,6 @@ export interface UserInfoResponse{
   data: UserInfo;
   token: string;
 }
-
-type Dictionary<T> = { [key: string]: T };
 interface LoginFormLang{
   loginTitle: Dictionary<string>;
   emailPlaceholder: Dictionary<string>;
@@ -149,3 +152,5 @@ export interface Locale{
   moves: TotalLang
   autoData: Dictionary<string>
 }
+
+export type UserToken = string|null|undefined;

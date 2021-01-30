@@ -1,11 +1,18 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
+import { type } from 'os';
 import create from '../utils/create';
+import prop from '../utils/prop';
 import locale from '../language/locale';
 import NewUserCategory from './newUserCategory';
 import Abstract from '../abstract/abstract';
 import MoneyMove from '../money-move/money-move';
 import config from '../../config';
 import DataModel from '../data-model/dataModel';
+// ts
+import {
+  Dictionary, Category, UserToken,
+  UserCategory, UserCategoryKeys,
+} from '../../types/typings';
 
 function getCurrentMonth(lang: string): string {
   const currentDate = new Date();
@@ -15,10 +22,13 @@ function getCurrentMonth(lang: string): string {
 export default class Categories extends Abstract {
   parent: HTMLElement;
   dataModel: DataModel;
-  elements: any;
+  elements: Dictionary<HTMLElement>;
   received: number;
   budget: number;
   lang: string;
+  userToken?: UserToken;
+  popup?: MoneyMove;
+  popUp?: NewUserCategory;
 
   constructor(lang: string, parent: HTMLElement, dataModel: DataModel) {
     super();
@@ -60,18 +70,20 @@ export default class Categories extends Abstract {
     });
   }
 
-  getTotalAmount(catType, field): number {
+  getTotalAmount(catType: number, field: 'plan'|'summa'): number {
     let amount = 0;
     this.dataModel.userCategories.forEach((key) => {
       if (key.type === catType) {
-        amount += parseFloat(key[field]) || 0;
+        const val :number = typeof key[field] === 'number' ? key[field] : parseFloat(key[field].toString());
+        amount += val || 0;
       }
     });
+
     return amount;
   }
 
-  loadCategories(currentCat, parent): void {
-    const currentUserCategories = [];
+  loadCategories(currentCat: Category, parent: HTMLElement): void {
+    const currentUserCategories: Array<UserCategory> = [];
     this.dataModel.userCategories.forEach((category) => {
       if (category.type === currentCat.id) currentUserCategories.push(category);
     });
@@ -79,11 +91,14 @@ export default class Categories extends Abstract {
     currentUserCategories.forEach((item) => {
       const categoryItem = create('div', 'block__categories-item', null, blockCategories);
       const categoryEdit = create('i', 'material-icons block__categories-item-edit', 'edit', categoryItem);
-      const categoryDelete = create('i', 'material-icons block__categories-item-edit block__categories-item-delete', 'delete', categoryItem);
+      const categoryDelete = create('i', 'material-icons block__categories-item-edit block__categories-item-delete',
+        'delete', categoryItem);
       create('h4', 'block__categories-title', item.name, categoryItem);
-      const iconBg = create('div', 'block__categories-img', `<i class="material-icons block__categories-icon">${item.icoUrl}</i>`, categoryItem);
+      const iconBg = create('div', 'block__categories-img',
+        `<i class="material-icons block__categories-icon">${item.icoUrl}</i>`, categoryItem);
       const itemAmountInfo = create('div', 'block__categories-amount', null, categoryItem);
-      const itemSum = create('p', 'block__categories-amount-actual', `${parseFloat(item.summa).toLocaleString(this.lang)} ${locale.currency[this.lang]}`, itemAmountInfo);
+      const itemSum = create('p', 'block__categories-amount-actual',
+        `${parseFloat(item.summa.toString()).toLocaleString(this.lang)} ${locale.currency[this.lang]}`, itemAmountInfo);
       if (currentCat.allowPlan) create('span', 'block__subtitle block__subtitle--centered', item.plan || 0, itemAmountInfo);
       if (item.type === 2) {
         iconBg.style.backgroundColor = '#fc0';
@@ -103,9 +118,10 @@ export default class Categories extends Abstract {
       iconBg.addEventListener('click', () => { this.popup = new MoneyMove(this.lang, item, this.dataModel); });
     });
     const categoryItemAdd = create('div', 'block__categories-item block__categories-item--add', null, blockCategories);
-    create('div', 'block__categories-img block__categories-img--add', '<i class="material-icons block__categories-icon">add</i>', categoryItemAdd);
+    create('div', 'block__categories-img block__categories-img--add',
+      '<i class="material-icons block__categories-icon">add</i>', categoryItemAdd);
 
-    function seeMoreLess(block) {
+    function seeMoreLess(block: HTMLElement) {
       for (let i = 8; i < block.children.length; i += 1) {
         block.children[i].classList.toggle('block__categories-item--hidden');
       }
@@ -123,11 +139,11 @@ export default class Categories extends Abstract {
     categoryItemAdd.addEventListener('click', () => { this.popUp = new NewUserCategory(this.lang, currentCat.id); });
   }
 
-  updateCategory(category): void {
+  updateCategory(category: UserCategory): void {
     this.popUp = new NewUserCategory(this.lang, category.type, category);
   }
 
-  deleteCategory(category) {
+  deleteCategory(category: UserCategory): void {
     this.userToken = localStorage.getItem('userToken');
 
     if (this.userToken) {
@@ -156,7 +172,7 @@ export default class Categories extends Abstract {
     }
   }
 
-  catchEvent(eventName) {
+  catchEvent(eventName: string): void {
     if (this.evtArr.indexOf(eventName) === -1) {
       throw new Error('Wrong custom event name.');
     }
