@@ -64,6 +64,7 @@ export default class MovesUpdate extends Abstract {
 
   updateMoneyMove(transactionDate, amount, userComment) {
     this.userToken = localStorage.getItem('userToken');
+    console.log(`Comment check: ${userComment}`);
 
     if (this.userToken) {
       fetch(`${config.server}/api/moves/update`, {
@@ -87,11 +88,15 @@ export default class MovesUpdate extends Abstract {
             this.popup.closePopup();
           } else {
             response.json().then(() => {
+              this.elements.blackOut = create('div', 'blackout', null, document.querySelector('.moves-history'));
+              this.elements.loader = create('div', 'loader', null, document.querySelector('.moves-history'));
               this.createCustomEvent('updateDataModel');
               this.popup.closePopup();
             }).then(() => {
               setTimeout(() => {
                 this.createCustomEvent('updateMovesBlock');
+                this.elements.loader.remove();
+                this.elements.blackOut.remove();
               }, 2000);
             });
           }

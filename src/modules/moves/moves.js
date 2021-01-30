@@ -88,6 +88,8 @@ export default class Moves extends Abstract {
         }),
       })
         .then((response) => {
+          this.elements.blackOut = create('div', 'blackout', null, document.querySelector('.moves-history'));
+          this.elements.loader = create('div', 'loader', null, document.querySelector('.moves-history'));
           if (response.status !== 200) {
             this.createCustomEvent('logOut');
           } else {
@@ -98,6 +100,8 @@ export default class Moves extends Abstract {
             }).then(() => {
               setTimeout(() => {
                 this.createCustomEvent('updateMovesBlock');
+                this.elements.loader.remove();
+                this.elements.blackOut.remove();
               }, 2000);
             });
           }
