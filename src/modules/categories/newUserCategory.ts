@@ -1,11 +1,29 @@
+/* eslint-disable @typescript-eslint/lines-between-class-members */
 import create from '../utils/create';
 import locale from '../language/locale';
 import Popup from '../popup/popup';
 import Abstract from '../abstract/abstract';
 import config from '../../config';
+// ts
+import {
+  Dictionary, Category, UserToken,
+  UserCategory,
+} from '../../types/typings';
 
 export default class NewUserCategory extends Abstract {
-  constructor(lang, catId, ...args) {
+  catId: number;
+  lang: string;
+  elements: Dictionary<HTMLElement|HTMLInputElement>;
+  icon: string;
+  args: Array<any>;
+  updateToCategory?: UserCategory;
+  addCatPopup?: Popup;
+  itemName?: string;
+  itemAmount?: string;
+  icons?: Array<string>;
+  iconBoard: HTMLElement;
+
+  constructor(lang: string, catId: number, ...args: any[]) {
     super();
     this.catId = catId;
     this.lang = lang;
@@ -16,9 +34,9 @@ export default class NewUserCategory extends Abstract {
   }
 
   loadForm() {
-    this.fragment = document.createDocumentFragment();
+    const fragment = document.createDocumentFragment();
 
-    this.elements.addItemBlock = create('div', 'add-item', null, this.fragment);
+    this.elements.addItemBlock = create('div', 'add-item', null, fragment);
     this.elements.addItemHead = create('div', 'add-item__head', null, this.elements.addItemBlock);
 
     this.elements.iconBtn = create('div', 'add-item__icon', null, this.elements.addItemBlock);
@@ -77,37 +95,42 @@ export default class NewUserCategory extends Abstract {
         default:
           this.elements.addItemHead.classList.add('');
       }
-      this.elements.iconBtnImg.textContent = this.updateToCategory.icoUrl;
-      this.icon = this.updateToCategory.icoUrl;
-      this.elements.newItemNameInput.setAttribute('value', this.updateToCategory.name);
-      if (this.updateToCategory.type === 1 || this.updateToCategory.type === 3) {
-        this.elements.newItemAmountInput.setAttribute('value', this.updateToCategory.plan);
-      } else {
-        this.elements.newItemAmountInput.setAttribute('value', this.updateToCategory.summa);
+
+      if (this.updateToCategory) {
+        this.elements.iconBtnImg.textContent = this.updateToCategory.icoUrl;
+        this.icon = this.updateToCategory.icoUrl;
+        this.elements.newItemNameInput.setAttribute('value', this.updateToCategory.name);
+        if (this.updateToCategory.type === 1 || this.updateToCategory.type === 3) {
+          this.elements.newItemAmountInput.setAttribute('value', this.updateToCategory.plan.toString());
+        } else {
+          this.elements.newItemAmountInput.setAttribute('value', this.updateToCategory.summa.toString());
+        }
       }
       this.elements.formSubmit.textContent = locale.updateBtn[this.lang];
     }
 
     this.elements.formSubmit.addEventListener('click', () => { this.processForm(); });
 
-    this.addCatPopup = new Popup(document.body, this.fragment);
+    this.addCatPopup = new Popup(document.body, fragment);
   }
 
-  processForm() {
+  processForm(): void {
     const formFields = [this.elements.newItemNameInput, this.elements.newItemAmountInput];
     formFields.forEach((el) => {
-      if (el.value === '') {
+      if ((<HTMLInputElement>el).value === '') {
         if (this.elements.errorBlock) this.elements.errorBlock.remove();
         this.elements.errorBlock = create('div', 'error error--add');
         create('span', 'error-text', locale.addNewSource.noEmptyFields[this.lang], this.elements.errorBlock);
-        el.parentElement.appendChild(this.elements.errorBlock);
-        el.parentElement.addEventListener('click', () => { this.elements.errorBlock.remove(); });
+        if (el.parentElement) {
+          el.parentElement.appendChild(this.elements.errorBlock);
+          el.parentElement.addEventListener('click', () => { this.elements.errorBlock.remove(); });
+        }
       }
     });
-    if (formFields.some((el) => el.value === '')) return;
+    if (formFields.some((el) => (<HTMLInputElement>el).value === '')) return;
 
-    this.itemName = this.elements.newItemNameInput.value;
-    this.itemAmount = this.elements.newItemAmountInput.value;
+    this.itemName = (<HTMLInputElement> this.elements.newItemNameInput).value;
+    this.itemAmount = (<HTMLInputElement> this.elements.newItemAmountInput).value;
     if (this.updateToCategory) {
       this.sendUpdate();
     } else {
@@ -154,18 +177,18 @@ export default class NewUserCategory extends Abstract {
           body: JSON.stringify({
             name: this.itemName,
             type: this.catId,
-            plan: parseFloat(this.itemAmount),
+            plan: parseFloat(this.itemAmount || '0'),
             icoUrl: this.icon,
           }),
         })
           .then((response) => {
             if (response.status !== 200) {
               this.createCustomEvent('logOut');
-              this.addCatPopup.closePopup();
+              if (this.addCatPopup) this.addCatPopup.closePopup();
             } else {
               response.json().then(() => {
                 this.createCustomEvent('userLoggedIn');
-                this.addCatPopup.closePopup();
+                if (this.addCatPopup) this.addCatPopup.closePopup();
               });
             }
           })
@@ -180,18 +203,18 @@ export default class NewUserCategory extends Abstract {
           body: JSON.stringify({
             name: this.itemName,
             type: this.catId,
-            summa: parseFloat(this.itemAmount),
+            summa: parseFloat(this.itemAmount || '0'),
             icoUrl: this.icon,
           }),
         })
           .then((response) => {
             if (response.status !== 200) {
               this.createCustomEvent('logOut');
-              this.addCatPopup.closePopup();
+              if (this.addCatPopup) this.addCatPopup.closePopup();
             } else {
               response.json().then(() => {
                 this.createCustomEvent('userLoggedIn');
-                this.addCatPopup.closePopup();
+                if (this.addCatPopup) this.addCatPopup.closePopup();
               });
             }
           })
@@ -204,7 +227,7 @@ export default class NewUserCategory extends Abstract {
     const userToken = localStorage.getItem('userToken');
 
     if (userToken) {
-      if (this.updateToCategory.type === 1 || this.updateToCategory.type === 3) {
+      if (this.updateToCategory && (this.updateToCategory.type === 1 || this.updateToCategory.type === 3)) {
         fetch(`${config.server}/api/categories/update`, {
           method: 'POST',
           headers: {
@@ -214,23 +237,23 @@ export default class NewUserCategory extends Abstract {
           body: JSON.stringify({
             id: this.updateToCategory.id,
             name: this.itemName,
-            plan: parseFloat(this.itemAmount),
+            plan: parseFloat(this.itemAmount || '0'),
             icoUrl: this.icon,
           }),
         })
           .then((response) => {
             if (response.status !== 200) {
               this.createCustomEvent('logOut');
-              this.addCatPopup.closePopup();
+              if (this.addCatPopup) this.addCatPopup.closePopup();
             } else {
               response.json().then(() => {
                 this.createCustomEvent('userLoggedIn');
-                this.addCatPopup.closePopup();
+                if (this.addCatPopup) this.addCatPopup.closePopup();
               });
             }
           })
           .catch((errMsg) => { throw new Error(errMsg); });
-      } else if (this.updateToCategory.type === 2) {
+      } else if (this.updateToCategory && this.updateToCategory.type === 2) {
         fetch(`${config.server}/api/categories/update`, {
           method: 'POST',
           headers: {
@@ -240,18 +263,18 @@ export default class NewUserCategory extends Abstract {
           body: JSON.stringify({
             id: this.updateToCategory.id,
             name: this.itemName,
-            summa: parseFloat(this.itemAmount),
+            summa: parseFloat(this.itemAmount || '0'),
             icoUrl: this.icon,
           }),
         })
           .then((response) => {
             if (response.status !== 200) {
               this.createCustomEvent('logOut');
-              this.addCatPopup.closePopup();
+              if (this.addCatPopup) this.addCatPopup.closePopup();
             } else {
               response.json().then(() => {
                 this.createCustomEvent('userLoggedIn');
-                this.addCatPopup.closePopup();
+                if (this.addCatPopup) this.addCatPopup.closePopup();
               });
             }
           })
@@ -260,7 +283,7 @@ export default class NewUserCategory extends Abstract {
     }
   }
 
-  catchEvent(eventName) {
+  catchEvent(eventName: string): void {
     if (eventName.match(/removeIconBoard/)) if (this.iconBoard) this.iconBoard.remove();
   }
 }
