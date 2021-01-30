@@ -75,6 +75,8 @@ export default class Moves extends Abstract {
     this.userToken = localStorage.getItem('userToken');
 
     if (this.userToken) {
+      this.elements.blackOut = create('div', 'blackout', null, document.querySelector('.moves-history'));
+      this.elements.loader = create('div', 'loader', null, document.querySelector('.moves-history'));
       fetch(`${config.server}/api/moves/delete`, {
         method: 'POST',
         headers: {
@@ -89,6 +91,8 @@ export default class Moves extends Abstract {
       })
         .then((response) => {
           if (response.status !== 200) {
+            this.elements.loader.remove();
+            this.elements.blackOut.remove();
             this.createCustomEvent('logOut');
           } else {
             response.json().then((data) => {
@@ -98,6 +102,8 @@ export default class Moves extends Abstract {
             }).then(() => {
               setTimeout(() => {
                 this.createCustomEvent('updateMovesBlock');
+                this.elements.loader.remove();
+                this.elements.blackOut.remove();
               }, 2000);
             });
           }
