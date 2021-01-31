@@ -154,3 +154,21 @@ export interface Locale{
 }
 
 export type UserToken = string|null|undefined;
+
+export interface ChartFilter {
+  id: number
+  name: string
+  catType?: number
+  userCat?: number
+}
+
+export interface ChartDataItem {
+  x: Date
+  y: number
+  userCat?: number
+}
+
+export interface ChartDataItemReal {
+  x: Date
+  y: number
+}

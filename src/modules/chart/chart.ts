@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable @typescript-eslint/lines-between-class-members */
 import ChartJs from 'chart.js';
 import create from '../utils/create';
 import locale from '../language/locale';
@@ -5,13 +7,33 @@ import config from '../../config';
 import DataSetItem from './dataSetItem';
 import Abstract from '../abstract/abstract';
 
+// ts
+import DataModel from '../data-model/dataModel';
+import {
+  Dictionary, ChartFilter, ChartDataItem, ChartDataItemReal,
+} from '../../types/typings';
+import Language from '../language/language';
+
 export default class Chart extends Abstract {
-  constructor(lang, parent, dataModel) {
+  lang: Language;
+  parent: HTMLElement;
+  elements: Dictionary<HTMLElement|CanvasRenderingContext2D|HTMLCanvasElement|null>;
+  dataModel: DataModel;
+  filter?: any;
+  chartConfig?: any;
+  chartData?: any;
+  chart?: ChartJs;
+  selectItems: Array<Dictionary<string>>;
+  selectTimes: Array<Dictionary<string>>;
+
+  constructor(lang: Language, parent: HTMLElement, dataModel: DataModel) {
     super();
     this.parent = parent;
     this.dataModel = dataModel;
     this.elements = {};
     this.lang = lang;
+    this.selectItems = [];
+    this.selectTimes = [];
 
     // this.selectItems = locale.chart.selectItems.map((item) => {
     //   const obj = {
@@ -45,8 +67,8 @@ export default class Chart extends Abstract {
     this.loadBlocks();
   }
 
-  chartSettingsInit() {
-    this.timeFormat = 'DD/MM/YYYY';
+  chartSettingsInit(): void {
+    const timeFormat = 'DD/MM/YYYY';
 
     this.chartConfig = {
       responsive: true,
@@ -57,7 +79,7 @@ export default class Chart extends Abstract {
         xAxes: [{
           type: 'time',
           time: {
-            format: this.timeFormat,
+            format: timeFormat,
             tooltipFormat: 'll',
           },
           scaleLabel: {
@@ -75,7 +97,7 @@ export default class Chart extends Abstract {
     };
   }
 
-  loadBlocks() {
+  loadBlocks(): void {
     const blockItem = create('div', 'block', null, this.parent);
     const blockHead = create('div', 'block__head', null, blockItem);
     const blockBody = create('div', 'block__body', null, blockItem);
@@ -96,36 +118,42 @@ export default class Chart extends Abstract {
     this.chartData = {};
     const canvasBox = create('div', 'canvasBox', null, blockBody);
     this.elements.canvas = create('canvas', 'canvas', null, canvasBox, ['width', '200'], ['height', '70'], ['id', 'chart']);
-    this.elements.ctx = this.elements.canvas.getContext('2d');
-    this.chart = new ChartJs(this.elements.ctx, {
-      type: 'line',
-      data: this.chartData,
-      options: this.chartConfig,
-    });
+    this.elements.ctx = (<HTMLCanvasElement> this.elements.canvas).getContext('2d');
+    if (this.elements.ctx) {
+      this.chart = new ChartJs(this.elements.ctx, {
+        type: 'line',
+        data: this.chartData,
+        options: this.chartConfig,
+      });
+    }
   }
 
-  selectHandler(evt) {
+  selectHandler(evt: Event): void {
     const { target } = evt;
-    const { source } = target.dataset;
-    const { value } = evt.target.options[evt.target.selectedIndex];
+    if (!target || (target && !(<HTMLElement>target).dataset)) return;
+    const { source } = (<HTMLElement>target).dataset;
+    const { value } = (<HTMLSelectElement>evt.target).options[(<HTMLSelectElement>evt.target).selectedIndex];
 
-    const curValue = this[source].find((item) => item.id === value);
-    if (!curValue) return;
+    if (!source) return;
 
     if (source === 'selectItems') {
+      const curValue = this.selectItems.find((item) => item.id === value);
+      if (!curValue) return;
       this.filter.catType = curValue.catType;
       if (this.filter.userCat !== undefined) delete this.filter.userCat;
       if (curValue.userCat !== undefined) this.filter.userCat = curValue.userCat;
     } else if (source === 'selectTimes') {
+      const curValue = this.selectTimes.find((item) => item.id === value);
+      if (!curValue) return;
       this.filter.dateTrunc = curValue.id;
     }
 
     this.getData();
   }
 
-  switchAppLang() {
-    this.selectItems = locale.chart.selectItems.map((item) => {
-      const obj = {
+  switchAppLang(): void {
+    this.selectItems = locale.chart.selectItems.map((item: Dictionary<any>) => {
+      const obj: ChartFilter = {
         id: item.id,
         name: item[this.lang.language],
       };
@@ -134,7 +162,7 @@ export default class Chart extends Abstract {
       return obj;
     });
 
-    this.selectTimes = locale.chart.selectTimes.data.map((item) => {
+    this.selectTimes = locale.chart.selectTimes.data.map((item: Dictionary<any>) => {
       const obj = {
         id: item.id,
         name: item[this.lang.language],
@@ -142,19 +170,23 @@ export default class Chart extends Abstract {
       return obj;
     });
 
-    this.elements.selectItems.innerHTML = '';
-    this.selectItems.forEach((item) => {
-      create('option', null, item.name, this.elements.selectItems, ['value', item.id]);
-    });
+    if (this.elements.selectItems) {
+      (<HTMLElement> this.elements.selectItems).innerHTML = '';
+      this.selectItems.forEach((item) => {
+        create('option', null, item.name, <HTMLElement> this.elements.selectItems, ['value', item.id]);
+      });
+    }
 
-    this.elements.selectTimes.innerHTML = '';
-    this.selectTimes.forEach((item) => {
-      create('option', null, item.name, this.elements.selectTimes, ['value', item.id]);
-    });
+    if (this.elements.selectTimes) {
+      (<HTMLElement> this.elements.selectTimes).innerHTML = '';
+      this.selectTimes.forEach((item) => {
+        create('option', null, item.name, <HTMLElement> this.elements.selectTimes, ['value', item.id]);
+      });
+    }
   }
 
-  prepareData(data) {
-    const dynamicColors = function () {
+  prepareData(data: any): void {
+    const dynamicColors = (): string => {
       const r = Math.floor(Math.random() * 255);
       const g = Math.floor(Math.random() * 255);
       const b = Math.floor(Math.random() * 255);
@@ -163,9 +195,9 @@ export default class Chart extends Abstract {
 
     this.chartData.datasets = [];
 
-    this.filter.catType.forEach((typeId) => {
-      const dataSetData = data.filter((item) => item.type_id === typeId).map((el) => {
-        const obj = {
+    this.filter.catType.forEach((typeId: number) => {
+      const dataSetData: Array<ChartDataItem> = data.filter((item: any) => item.type_id === typeId).map((el: any) => {
+        const obj: ChartDataItem = {
           y: el.sum,
           x: new Date(el.date),
         };
@@ -177,18 +209,22 @@ export default class Chart extends Abstract {
 
       let color;
       if (this.filter.userCat !== undefined) {
-        const newDataSetData = dataSetData.reduce((prev, cur, idx) => {
-          if (!prev[cur.userCat]) prev[cur.userCat] = [];
-          const newObj = { ...cur };
-          delete newObj.userCat;
-          prev[cur.userCat].push(newObj);
+        const newDataSetObj :Dictionary<any> = {};
+        const newDataSetData = dataSetData.reduce((prev, cur) => {
+          if (cur.userCat) {
+            if (!prev[cur.userCat]) prev[cur.userCat] = [];
+            const newObj = { ...cur };
+            delete newObj.userCat;
+            prev[cur.userCat].push(newObj);
+          }
           return prev;
-        }, {});
+        }, newDataSetObj);
 
         Object.keys(newDataSetData).forEach((userCatId) => {
-          const title = this.dataModel.userCategories.find(
+          const userCat = this.dataModel.userCategories.find(
             (uc) => uc.id === parseInt(userCatId, 10),
-          ).name;
+          );
+          const title = userCat ? userCat.name : '';
           const dataList = newDataSetData[userCatId];
           color = dynamicColors();
 
@@ -213,10 +249,10 @@ export default class Chart extends Abstract {
       }
     });
 
-    this.chart.update();
+    if (this.chart) this.chart.update();
   }
 
-  getData() {
+  getData(): void {
     const userToken = localStorage.getItem('userToken');
 
     fetch(`${config.server}/api/moves/getDataByCatType`, {
@@ -242,7 +278,7 @@ export default class Chart extends Abstract {
       .catch((errMsg) => { throw new Error(errMsg); });
   }
 
-  catchEvent(eventName) {
+  catchEvent(eventName: string): void {
     if (eventName.match(/changeLang/)) this.switchAppLang();
   }
 }

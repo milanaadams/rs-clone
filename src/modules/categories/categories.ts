@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
-import { type } from 'os';
 import create from '../utils/create';
-import prop from '../utils/prop';
 import locale from '../language/locale';
 import NewUserCategory from './newUserCategory';
 import Abstract from '../abstract/abstract';
@@ -11,7 +9,7 @@ import DataModel from '../data-model/dataModel';
 // ts
 import {
   Dictionary, Category, UserToken,
-  UserCategory, UserCategoryKeys,
+  UserCategory,
 } from '../../types/typings';
 
 function getCurrentMonth(lang: string): string {
@@ -74,8 +72,8 @@ export default class Categories extends Abstract {
     let amount = 0;
     this.dataModel.userCategories.forEach((key) => {
       if (key.type === catType) {
-        const val :number = typeof key[field] === 'number' ? key[field] : parseFloat(key[field].toString());
-        amount += val || 0;
+        const val :number = typeof key[field] === 'number' ? key[field] : parseFloat((key[field] || 0).toString());
+        amount += val;
       }
     });
 
