@@ -182,3 +182,5 @@ export interface IputInfoMove {
   moveFrom: UserCategory|null
   moveTo: UserCategory|null
 }
+
+export type Content = string|number|null|boolean;

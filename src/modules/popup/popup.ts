@@ -3,14 +3,14 @@ import create from '../utils/create';
 import Abstract from '../abstract/abstract';
 
 // ts
-import { Dictionary } from '../../types/typings';
+import { Dictionary, Content as ContentType } from '../../types/typings';
 
 export default class Popup extends Abstract {
   parent: HTMLElement;
-  content: any;
+  content: ContentType;
   elements: Dictionary<HTMLElement>;
 
-  constructor(parent: HTMLElement, content: any) {
+  constructor(parent: HTMLElement, content: ContentType) {
     super();
     this.parent = parent;
     this.content = content;
