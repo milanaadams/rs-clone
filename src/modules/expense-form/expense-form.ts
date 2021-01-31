@@ -1,13 +1,22 @@
+/* eslint-disable @typescript-eslint/lines-between-class-members */
 import create from '../utils/create';
 
+// ts
+import {
+  Dictionary,
+} from '../../types/typings';
+
 export default class ExpenseForm {
-  constructor(parent) {
+  parent: HTMLElement;
+  elements: Dictionary<HTMLElement|CanvasRenderingContext2D|HTMLCanvasElement|null>;
+
+  constructor(parent: HTMLElement) {
     this.parent = parent;
     this.elements = {};
     this.createExpenseForm();
   }
 
-  createExpenseForm() {
+  createExpenseForm(): void {
     this.elements.expenseForm = create('form', 'expense-form', null, this.parent);
     this.elements.expenseFormInner = create('div', 'expense-form__inner', null, this.elements.expenseForm);
 

@@ -6,11 +6,11 @@ import Abstract from '../abstract/abstract';
 import { Dictionary, Content as ContentType } from '../../types/typings';
 
 export default class Popup extends Abstract {
-  parent: HTMLElement;
+  parent: HTMLElement|DocumentFragment;
   content: ContentType;
   elements: Dictionary<HTMLElement>;
 
-  constructor(parent: HTMLElement, content: ContentType) {
+  constructor(parent: HTMLElement|DocumentFragment, content: ContentType) {
     super();
     this.parent = parent;
     this.content = content;
