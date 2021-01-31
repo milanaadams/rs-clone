@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/lines-between-class-members */
+
 export default class DataSetItem {
   label: string;
   data : Array<any>;

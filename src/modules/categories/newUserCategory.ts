@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 import create from '../utils/create';
 import locale from '../language/locale';

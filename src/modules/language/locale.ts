@@ -1,6 +1,6 @@
-import { Locale } from '../../types/typings';
+import { Dictionary } from '../../types/typings';
 
-const locale: Locale = {
+const locale: Dictionary<any> = {
   // login form
   loginForm: {
     loginTitle: {

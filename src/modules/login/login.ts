@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 /* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import create from '../utils/create';
 import Abstract from '../abstract/abstract';
 import locale from '../language/locale';

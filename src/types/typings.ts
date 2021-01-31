@@ -138,25 +138,25 @@ interface ChartLang{
 interface TotalLang{
   total: Dictionary<string>
 }
-export interface Locale{
-  loginForm: LoginFormLang
-  register: RegisterLang
-  income: BloksLang
-  accounts: BloksLang
-  expenses: BloksLang
-  addNewSource: AddNewSourceLang
-  updateUserCat: UpdateUserCatLang
-  menu: MenuLang
-  updateBtn: Dictionary<string>
-  addBtn: Dictionary<string>
-  move: MoveLang
-  chart: ChartLang
-  weekdays: Dictionary<Array<string>>
-  months: Dictionary<Array<string>>
-  currency: Dictionary<string>
-  moves: TotalLang
-  autoData: Dictionary<string>
-}
+// export interface Locale{
+//   loginForm: LoginFormLang
+//   register: RegisterLang
+//   income: BloksLang
+//   accounts: BloksLang
+//   expenses: BloksLang
+//   addNewSource: AddNewSourceLang
+//   updateUserCat: UpdateUserCatLang
+//   menu: MenuLang
+//   updateBtn: Dictionary<string>
+//   addBtn: Dictionary<string>
+//   move: MoveLang
+//   chart: ChartLang
+//   weekdays: Dictionary<Array<string>>
+//   months: Dictionary<Array<string>>
+//   currency: Dictionary<string>
+//   moves: TotalLang
+//   autoData: Dictionary<string>
+// }
 
 export type UserToken = string|null|undefined;
 
@@ -183,4 +183,4 @@ export interface IputInfoMove {
   moveTo: UserCategory|null
 }
 
-export type Content = string|number|null|boolean;
+export type Content = string|number|null|boolean|HTMLElement|DocumentFragment;

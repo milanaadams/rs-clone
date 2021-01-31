@@ -1,5 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/lines-between-class-members */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import ChartJs from 'chart.js';
 import create from '../utils/create';
 import locale from '../language/locale';
@@ -10,7 +12,7 @@ import Abstract from '../abstract/abstract';
 // ts
 import DataModel from '../data-model/dataModel';
 import {
-  Dictionary, ChartFilter, ChartDataItem, ChartDataItemReal,
+  Dictionary, ChartFilter, ChartDataItem,
 } from '../../types/typings';
 import Language from '../language/language';
 

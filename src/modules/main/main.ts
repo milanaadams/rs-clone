@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import create from '../utils/create';
 import Abstract from '../abstract/abstract';
 import '../utils/assets';
