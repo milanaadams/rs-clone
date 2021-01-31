@@ -99,9 +99,11 @@ export default class NewUserCategory extends Abstract {
         this.icon = this.updateToCategory.icoUrl;
         this.elements.newItemNameInput.setAttribute('value', this.updateToCategory.name);
         if (this.updateToCategory.type === 1 || this.updateToCategory.type === 3) {
-          this.elements.newItemAmountInput.setAttribute('value', this.updateToCategory.plan.toString());
+          this.elements.newItemAmountInput.setAttribute('value',
+            this.updateToCategory.plan ? this.updateToCategory.plan.toString() : '0');
         } else {
-          this.elements.newItemAmountInput.setAttribute('value', this.updateToCategory.summa.toString());
+          this.elements.newItemAmountInput.setAttribute('value',
+            this.updateToCategory.summa ? this.updateToCategory.summa.toString() : '0');
         }
       }
       this.elements.formSubmit.textContent = locale.updateBtn[this.lang];
