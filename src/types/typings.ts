@@ -23,6 +23,11 @@ export interface TagsArr {
   tag: number;
 }
 
+export interface MoveItem {
+  element: HTMLElement,
+  info: Move,
+}
+
 export interface Move {
   id: number;
   user: number;
@@ -41,7 +46,7 @@ export interface UserInfoUser {
   name: string;
   userCategories: Array<UserCategory>;
   tags: Array<Tag>;
-  allMoves: Array<Move>;
+  allMoves: Dictionary<Array<Move>>;
   tagsArr: Array<TagsArr>;
 }
 

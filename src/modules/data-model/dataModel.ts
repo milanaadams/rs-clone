@@ -10,7 +10,7 @@ export default class DataModel extends Abstract {
   categories: Array<t.Category>;
   blocks: Array<t.Category>;
   userCategories: Array<t.UserCategory>;
-  allMoves: Array<t.Move>;
+  allMoves: t.Dictionary<Array<t.Move>>;
   userToken?: string|undefined|null;
 
   constructor(data: t.UserInfo) {

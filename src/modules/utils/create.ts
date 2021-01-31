@@ -1,7 +1,7 @@
 export default function create(el: string,
   classNames: string|null,
   child: any|null = null,
-  parent: null|HTMLElement|DocumentFragment = null,
+  parent: null|HTMLElement|DocumentFragment|Element = null,
   ...dataAttr: any|null): HTMLElement|HTMLInputElement|HTMLCanvasElement {
   let element: HTMLElement;
   try {
