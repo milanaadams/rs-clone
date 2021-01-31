@@ -1,11 +1,29 @@
+/* eslint-disable @typescript-eslint/lines-between-class-members */
 import create from '../utils/create';
 import locale from '../language/locale';
 import Popup from '../popup/popup';
 import config from '../../config';
 import Abstract from '../abstract/abstract';
 
+// ts
+import {
+  UserToken, Dictionary,
+  UserCategory, IputInfoMove,
+} from '../../types/typings';
+import DataModel from '../data-model/dataModel';
+
 export default class MoneyMove extends Abstract {
-  constructor(lang, category, dataModel) {
+  lang: string;
+  currentCategory: UserCategory;
+  dataModel: DataModel;
+  inputInfo : IputInfoMove;
+  elements: Dictionary<HTMLElement|HTMLInputElement>;
+  userToken?: UserToken;
+  categoriesFrom?: Array<UserCategory>;
+  categoriesTo?: Array<UserCategory>;
+  popup?: Popup;
+
+  constructor(lang: string, category: UserCategory, dataModel: DataModel) {
     super();
     this.currentCategory = category;
     this.dataModel = dataModel;
@@ -18,7 +36,7 @@ export default class MoneyMove extends Abstract {
     this.loadTransferForm();
   }
 
-  loadTransferForm() {
+  loadTransferForm(): void {
     this.loadToAndFromCategories();
     const fragment = document.createDocumentFragment();
 
@@ -28,13 +46,15 @@ export default class MoneyMove extends Abstract {
     this.elements.moveFromBlock = create('div', 'move-form__item', null, this.elements.form);
     create('label', 'move-form__label', locale.move.labelFrom[this.lang], this.elements.moveFromBlock);
     this.elements.formSelectFrom = create('select', 'move-form__select', null, this.elements.moveFromBlock);
-    this.loadSelectOptions(this.categoriesFrom, this.elements.formSelectFrom,
-      this.currentCategory.id);
+    if (this.categoriesFrom) {
+      this.loadSelectOptions(this.categoriesFrom, this.elements.formSelectFrom,
+        this.currentCategory.id);
+    }
 
     this.elements.moveToBlock = create('div', 'move-form__item', null, this.elements.form);
     create('label', 'move-form__label', locale.move.labelTo[this.lang], this.elements.moveToBlock);
     this.elements.formSelectTo = create('select', 'move-form__select', null, this.elements.moveToBlock);
-    this.loadSelectOptions(this.categoriesTo, this.elements.formSelectTo, this.currentCategory.id);
+    if (this.categoriesTo) { this.loadSelectOptions(this.categoriesTo, this.elements.formSelectTo, this.currentCategory.id); }
 
     this.elements.moveAmountBlock = create('div', 'move-form__item', null, this.elements.form);
     create('label', 'move-form__label', locale.move.labelAmount[this.lang], this.elements.moveAmountBlock);
@@ -44,7 +64,7 @@ export default class MoneyMove extends Abstract {
     this.elements.moveDateBlock = create('div', 'move-form__item', null, this.elements.form);
     create('label', 'move-form__label', locale.move.labelDate[this.lang], this.elements.moveDateBlock);
     this.elements.moveDate = create('input', 'move-form__input', null, this.elements.moveDateBlock, ['type', 'date']);
-    this.elements.moveDate.valueAsDate = new Date();
+    (<HTMLInputElement> this.elements.moveDate).valueAsDate = new Date();
 
     this.elements.moveCommentBlock = create('div', 'move-form__item move-form__item--long', null, this.elements.form);
     create('label', 'move-form__label', locale.move.labelComment[this.lang], this.elements.moveCommentBlock);
@@ -59,7 +79,7 @@ export default class MoneyMove extends Abstract {
     this.popup = new Popup(document.body, fragment);
   }
 
-  loadToAndFromCategories() {
+  loadToAndFromCategories(): void {
     if (this.currentCategory.type === 3) {
       this.inputInfo.moveTo = this.currentCategory;
       this.categoriesTo = this.dataModel.getAllCagetoryByType(this.currentCategory.type);
@@ -77,35 +97,39 @@ export default class MoneyMove extends Abstract {
     }
   }
 
-  loadSelectOptions(category, parent, selectedId) {
+  loadSelectOptions(category: Array<UserCategory>, parent: HTMLElement|HTMLInputElement, selectedId: number): void {
     category.forEach((element) => {
       const optionItem = create('option', 'move-form__option', element.name, parent, ['value', element.id]);
       if (this.currentCategory.type === 2) {
-        if (parent === this.elements.formSelectFrom && element.id === selectedId) optionItem.setAttribute('selected', true);
-      } else if (element.id === selectedId) optionItem.setAttribute('selected', true);
+        if (parent === this.elements.formSelectFrom && element.id === selectedId) optionItem.setAttribute('selected', true.toString());
+      } else if (element.id === selectedId) optionItem.setAttribute('selected', true.toString());
     });
   }
 
-  processForm() {
+  processForm(): void {
     const formFields = [this.elements.formSelectFrom, this.elements.formSelectTo,
       this.elements.moveDate, this.elements.moveAmount];
     formFields.forEach((el) => {
-      if (el.value === '') {
+      if ((<HTMLInputElement>el).value === '') {
         if (this.elements.errorBlock) this.elements.errorBlock.remove();
         this.elements.errorBlock = create('div', 'move-error');
         create('span', 'move-error__text', 'This field should not be empty', this.elements.errorBlock);
-        el.parentElement.appendChild(this.elements.errorBlock);
-        el.parentElement.addEventListener('click', () => { this.elements.errorBlock.remove(); });
+        if (el.parentElement) el.parentElement.appendChild(this.elements.errorBlock);
+        if (el.parentElement) el.parentElement.addEventListener('click', () => { this.elements.errorBlock.remove(); });
       }
     });
-    if (formFields.some((el) => el.value === '')) return;
+    if (formFields.some((el) => (<HTMLInputElement>el).value === '')) return;
 
-    this.generateMoneyMove(parseInt(this.elements.formSelectFrom.value, 10),
-      parseInt(this.elements.formSelectTo.value, 10), this.elements.moveDate.value,
-      parseFloat(this.elements.moveAmount.value), this.elements.moveComment.value);
+    this.generateMoneyMove(
+      parseInt((<HTMLInputElement> this.elements.formSelectFrom).value, 10),
+      parseInt((<HTMLInputElement> this.elements.formSelectTo).value, 10),
+      (<HTMLInputElement> this.elements.moveDate).value,
+      parseFloat((<HTMLInputElement> this.elements.moveAmount).value),
+      (<HTMLInputElement> this.elements.moveComment).value,
+    );
   }
 
-  generateMoneyMove(catFrom, catTo, transactionDate, amount, userComment) {
+  generateMoneyMove(catFrom:number, catTo: number, transactionDate: string, amount:number, userComment:string): void {
     this.userToken = localStorage.getItem('userToken');
 
     if (this.userToken) {
@@ -128,11 +152,11 @@ export default class MoneyMove extends Abstract {
         .then((response) => {
           if (response.status !== 200) {
             this.createCustomEvent('logOut');
-            this.popup.closePopup();
+            if (this.popup) this.popup.closePopup();
           } else {
             response.json().then(() => {
               this.createCustomEvent('userLoggedIn');
-              this.popup.closePopup();
+              if (this.popup) this.popup.closePopup();
             });
           }
         })
@@ -140,7 +164,7 @@ export default class MoneyMove extends Abstract {
     }
   }
 
-  catchEvent(eventName) {
+  catchEvent(eventName: string) : void {
     if (this.evtArr.indexOf(eventName) === -1) {
       throw new Error('Wrong custom event name.');
     }

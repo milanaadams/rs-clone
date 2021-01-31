@@ -172,3 +172,8 @@ export interface ChartDataItemReal {
   x: Date
   y: number
 }
+
+export interface IputInfoMove {
+  moveFrom: UserCategory|null
+  moveTo: UserCategory|null
+}

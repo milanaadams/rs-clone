@@ -84,8 +84,8 @@ export default class Login extends Abstract {
         this.processForm(this.elements.inputEmail, this.elements.inputPass, this.elements.inputName);
       });
     }
-    this.elements.inputEmail.addEventListener('focus', (evt: Event) => { this.removeErrorMsg(evt.target); });
-    this.elements.inputPass.addEventListener('focus', (evt: Event) => { this.removeErrorMsg(evt.target); });
+    this.elements.inputEmail.addEventListener('focus', (evt: Event) => { this.removeErrorMsg(<HTMLElement> evt.target); });
+    this.elements.inputPass.addEventListener('focus', (evt: Event) => { this.removeErrorMsg(<HTMLElement> evt.target); });
   }
 
   processForm(...args: Array<HTMLInputElement>): void {

@@ -1,4 +1,4 @@
-import Locale from '../../types/typings';
+import { Locale } from '../../types/typings';
 
 const locale: Locale = {
   // login form
