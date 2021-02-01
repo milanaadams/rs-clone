@@ -49,6 +49,7 @@ export default class Main extends Abstract {
   loadContent() {
     removeChildren(this.elements.mainInner);
     removeChildren(this.elements.headerRight);
+    this.elements.loader = create('div', 'loader', null, this.elements.mainInner);
     this.userToken = localStorage.getItem('userToken');
     if (this.userToken) {
       fetch(`${config.server}/api/user/getInfo`, {
@@ -59,6 +60,7 @@ export default class Main extends Abstract {
         },
       })
         .then((response) => {
+          this.elements.loader.remove();
           if (response.status !== 200) {
             this.userToken = null;
             localStorage.removeItem('userToken');
@@ -76,6 +78,7 @@ export default class Main extends Abstract {
     }
 
     if (!this.userToken) {
+      this.elements.loader.remove();
       this.loadLoginForm();
       const langSwitcher = create('div', 'language-switcher', this.lang.loadLanguageSwitcher(), this.elements.headerRight);
       langSwitcher.addEventListener('click', () => { this.lang.switchLanguage(); });
