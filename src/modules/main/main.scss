@@ -10,6 +10,7 @@
 
 .main{
   &__inner{
+    position: relative;
     padding: 40px 0;
     min-height: calc(100vh - 98px - 70px);
     height: auto;
@@ -39,3 +40,4 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
