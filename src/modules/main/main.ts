@@ -66,7 +66,6 @@ export default class Main extends Abstract {
   loadContent():void {
     removeChildren(this.elements.mainInner);
     removeChildren(this.elements.headerRight);
-    this.elements.loader = create('div', 'loader', null, this.elements.mainInner);
     this.userToken = localStorage.getItem('userToken');
     if (this.userToken) {
       this.elements.loader = create('div', 'loader', null, this.elements.mainInner);
