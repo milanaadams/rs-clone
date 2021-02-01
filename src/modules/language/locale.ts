@@ -1,4 +1,6 @@
-const locale = {
+import { Dictionary } from '../../types/typings';
+
+const locale: Dictionary<any> = {
   // login form
   loginForm: {
     loginTitle: {
@@ -333,7 +335,8 @@ const locale = {
   months: {
     en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     ru: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-    bel: ['Cтудзень', 'Люты', 'Сакавік', 'Красавік', 'Май', 'Чэрвень', 'Ліпень', 'Жнівень', 'Верасень', 'Кастрычнік', 'Лістапад', 'Снежань'],
+    bel: ['Cтудзень', 'Люты', 'Сакавік', 'Красавік', 'Май', 'Чэрвень', 'Ліпень',
+      'Жнівень', 'Верасень', 'Кастрычнік', 'Лістапад', 'Снежань'],
   },
   currency: {
     en: '$',
