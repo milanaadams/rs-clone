@@ -5,6 +5,11 @@
     display: none
   }
   &__day{
+    &-block:last-child{
+      ul{
+        margin-bottom: 0;
+      }
+    }
     &-head{
       margin-bottom: 12px;
       font-size: 21px;
