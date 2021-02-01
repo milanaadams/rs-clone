@@ -64,3 +64,19 @@
     }
   }
 }
+
+@media (max-width: $mediaquery-mobile-small) {
+  .move-form__item{
+    width: 100%;
+  }
+
+  .move-form__select, .move-form__input{
+    font-size: 14px;
+    height: 30px;
+  }
+
+  .move-form__btn{
+    font-size: 16px;
+    padding: 7px 13px;
+  }
+}

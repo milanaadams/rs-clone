@@ -31,6 +31,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
   }
 
   &__username{
@@ -141,4 +142,24 @@
     }
   }
   
+}
+
+@media (max-width: $mediaquery-mobile-medium) {
+  .header__logo-title{
+    display: none;
+  }
+  .header__username{
+    display: none;
+  }
+}
+
+@media (max-width: $mediaquery-mobile-small) {
+  .block__head{
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .block__name{
+    text-align: center;
+  }
 }

@@ -55,7 +55,12 @@
   &__transaction{
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     margin-bottom: 20px;
+    &-category{
+      margin-right: 20px;
+      margin-bottom: 10px;
+    }
     &-comment{
       font-size: 12px;
       font-weight: 300;
@@ -66,7 +71,6 @@
   }
   &__from-cat{
     font-size: 14px;
-    white-space: nowrap;
     text-overflow: ellipsis;
     font-family: $main-font;
     color: $move-from-cat-text;
@@ -76,14 +80,12 @@
     margin-top: 9px;
     overflow: hidden;
     font-size: 17px;
-    white-space: nowrap;
     text-overflow: ellipsis;
     font-family: $main-font;
     color: $move-to-cat-text;
   }
   &__amount{
     font-size: 17px;
-    white-space: nowrap;
     text-align: right;
     font-family: $main-font;
   }
@@ -107,5 +109,11 @@
     &-amount{
       font-size: 20px;
     }
+  }
+}
+
+@media (max-width: $mediaquery-mobile-medium) {
+  .moves-history__day-head{
+    font-size: 18px;
   }
 }

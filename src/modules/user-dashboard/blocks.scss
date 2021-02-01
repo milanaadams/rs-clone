@@ -22,6 +22,8 @@
 
   &__stats{
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     &-item{
       margin-left: 50px;
       text-align: right;
@@ -43,6 +45,10 @@
       display: block;
       text-align: center;
     }
+  }
+
+  &__amount{
+    word-break: break-all;
   }
 
   &__body{
@@ -132,10 +138,12 @@
 
     &-amount{
       height: 40px;
+      word-break: break-all;
       &-actual{
         line-height: 16px;
         font-weight: 500;
         font-size: 16px;
+        text-align: center;
         color: $income-bg-color;
       }
     }
@@ -165,5 +173,47 @@
     &-item{
       width: 48%;
     }
+  }
+
+  .block__title{
+    margin-bottom: 20px;
+  }
+
+  .block__name{
+    font-size: 18px;
+  }
+
+  .block__amount{
+    font-size: 18px;
+  }
+
+  .block__stats-item{
+    margin-left: 20px;
+    text-align: center;
+    &:first-child{
+      margin-left: 0;
+    }
+  }
+
+  .block__subtitle{
+    display: block;
+    text-align: center;
+  }
+}
+
+@media (max-width: $mediaquery-mobile-small) {
+  .block__categories{
+    &-item{
+      width: 100%;
+    }
+  }
+
+  .block__categories-title{
+    width: 90%;
+    max-width: 100%;
+    text-align: center;
+    text-overflow: none;
+    white-space: normal;
+    line-height: 24px;
   }
 }
