@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/lines-between-class-members */
 import create from '../utils/create';
 import removeChildren from '../utils/removeAllChildren';
 import Abstract from '../abstract/abstract';
@@ -6,9 +7,24 @@ import locale from '../language/locale';
 import Chart from '../chart/chart';
 import Moves from '../moves/moves';
 import config from '../../config';
+// ts
+import Language from '../language/language';
+import DataModel from '../data-model/dataModel';
+import { UserToken, Dictionary } from '../../types/typings';
 
 export default class UserDashboard extends Abstract {
-  constructor(lang, parent, headerInfo, dataModel) {
+  parent: HTMLElement;
+  elements: Dictionary<HTMLElement>;
+  headerInfo: HTMLElement;
+  dataModel: DataModel;
+  langObj: Language;
+  lang: string;
+  userToken?: UserToken;
+  incomeBlock?: Categories;
+  chartBlock?: Chart;
+  movesHistoryBlock?: Moves;
+
+  constructor(lang: Language, parent: HTMLElement, headerInfo: HTMLElement, dataModel: DataModel) {
     super();
     this.parent = parent;
     this.elements = {};
@@ -20,13 +36,13 @@ export default class UserDashboard extends Abstract {
     this.loadDashboard();
   }
 
-  loadHeaderInfo() {
+  loadHeaderInfo(): void {
     create('p', 'header__username', this.dataModel.user, this.headerInfo);
     create('div', 'header__user-icon', null, this.headerInfo);
     this.loadDropdownHeaderMenu();
   }
 
-  loadDropdownHeaderMenu() {
+  loadDropdownHeaderMenu(): void {
     this.elements.dropdown = create('div', 'header__dropdown', null, this.headerInfo);
     this.elements.dropdownMenu = create('ul', 'header__dropdown-menu', null, this.elements.dropdown);
     const langSwitcher = create('li', 'header__dropdown-menu__item', this.langObj.loadLanguageSwitcher(), this.elements.dropdownMenu);
@@ -72,7 +88,7 @@ export default class UserDashboard extends Abstract {
     });
   }
 
-  loadDashboard() {
+  loadDashboard(): void {
     this.elements.dashboard = create('div', 'dashboard', null, this.parent);
     this.elements.dashboardLeft = create('div', 'dashboard__left', null, this.elements.dashboard);
     this.elements.dashboardRight = create('div', 'dashboard__right', null, this.elements.dashboard);
@@ -81,7 +97,7 @@ export default class UserDashboard extends Abstract {
     this.movesHistoryBlock = new Moves(this.lang, this.elements.dashboardRight, this.dataModel);
   }
 
-  catchEvent(eventName) {
+  catchEvent(eventName: string): void {
     if (this.evtArr.indexOf(eventName) === -1) {
       throw new Error('Wrong custom event name.');
     }

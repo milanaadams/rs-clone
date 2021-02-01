@@ -1,5 +1,12 @@
-export default function create(el, classNames, child, parent, ...dataAttr) {
-  let element = null;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint @typescript-eslint/no-explicit-any: ["error", { "ignoreRestArgs": true }] */
+
+export default function create(el: string,
+  classNames: string|null,
+  child: any|null = null,
+  parent: null|HTMLElement|DocumentFragment|Element = null,
+  ...dataAttr: Array<any>): HTMLElement|HTMLInputElement|HTMLCanvasElement {
+  let element: HTMLElement;
   try {
     element = document.createElement(el);
   } catch (e) {
@@ -35,8 +42,10 @@ export default function create(el, classNames, child, parent, ...dataAttr) {
       try {
         if (attrValue === '') {
           element.setAttribute(attrName, '');
-        } else if (attrName && attrName.toString().match(/value|href|target|style|type|for|id|placeholder|cols|rows|autocorrect|spellcheck|src|name/)) {
-          element.setAttribute(attrName, attrValue);
+        } else if (attrName && attrName
+          .toString()
+          .match(/value|href|target|style|type|for|id|placeholder|cols|rows|autocorrect|spellcheck|src|name/)) {
+          element.setAttribute(attrName, attrValue || '');
         } else if (attrName) {
           element.dataset[attrName] = attrValue;
         }

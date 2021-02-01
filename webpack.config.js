@@ -11,11 +11,14 @@ module.exports = (env, options) => {
     mode: isProduction ? 'production' : 'development',
     devtool: 'source-map',
     watch: !isProduction,
-    entry: ['./src/index.js', './src/style.scss'],
+    entry: ['./src/index.ts', './src/style.scss'],
     output: {
       path: path.join(__dirname, '/dist'),
       publicPath: './',
       filename: 'script.js'
+    },
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js'],
     },
     devServer: {
       contentBase: './dist',
@@ -25,14 +28,18 @@ module.exports = (env, options) => {
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.ts(x?)$/,
             exclude: /node_modules/,
-            use: {
+            use: [{
               loader: 'babel-loader',
               options: {
                 presets: ['@babel/preset-env']
               }
+            },
+            {
+              loader: 'ts-loader'
             }
+          ]
         },
         {
           test: /\.scss$/,

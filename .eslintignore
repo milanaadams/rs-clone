@@ -4,3 +4,4 @@ webpack.config.js
 /.git
 /.vscode
 /assets
+.eslintrc.js
