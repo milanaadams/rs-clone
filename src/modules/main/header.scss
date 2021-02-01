@@ -37,6 +37,8 @@
     position: relative;
     cursor: pointer;
     color: $main-text-color;
+    margin-left: 20px;
+    text-align: right;
     &::after {
       content: "";
       width: 0;
