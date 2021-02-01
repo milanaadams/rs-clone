@@ -137,3 +137,13 @@
     }
   }
 }
+
+@media (max-width: $mediaquery-mobile-small) {
+  .icon-board{
+    width: 280px;
+  }
+
+  .add-item__head{
+    font-size: 18px;
+  }
+}

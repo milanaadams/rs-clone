@@ -137,3 +137,29 @@
   color: $main-accent-color;
   text-transform: uppercase;
 }
+
+@media (max-width: $mediaquery-mobile-large) {
+  .registration-success{
+    font-size: 22px;
+    text-align: center;
+  }
+}
+
+@media (max-width: $mediaquery-mobile-small) {
+  .login__inner{
+    width: 280px;
+  }
+
+  .login__form{
+    width: 280px;
+  }
+
+  .login__form-input{
+    height: 60px;
+    font-size: 16px;
+  }
+
+  .submit-btn{
+    line-height: 60px;
+  }
+}

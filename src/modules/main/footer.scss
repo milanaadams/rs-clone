@@ -27,3 +27,16 @@
     }
   }
 }
+
+@media (max-width: $mediaquery-mobile-small) {
+  .footer__inner{
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
+
+  .footer__course-link{
+    margin: 15px 0;
+  }
+}
