@@ -77,7 +77,7 @@ export default class Main extends Abstract {
         },
       })
         .then((response) => {
-          this.elements.loader.remove();
+          //this.elements.loader.remove();
           if (response.status !== 200) {
             this.userToken = null;
             localStorage.removeItem('userToken');
