@@ -98,10 +98,8 @@ export default class Main extends Abstract {
     }
 
     if (!this.userToken) {
-      this.elements.loader.remove();
       this.loadLoginForm();
       const langSwitcher = create('div', 'language-switcher', this.lang.loadLanguageSwitcher(), this.elements.headerRight);
-      langSwitcher.addEventListener('click', () => { this.lang.switchLanguage(0); });
     }
   }
 
