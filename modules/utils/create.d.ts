@@ -1,0 +1,1 @@
+export default function create(el: string, classNames: string | null, child?: any | null, parent?: null | HTMLElement | DocumentFragment | Element, ...dataAttr: Array<any>): HTMLElement | HTMLInputElement | HTMLCanvasElement;
