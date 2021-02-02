@@ -131,6 +131,12 @@ const locale: Dictionary<any> = {
       bel: 'Поле павінна быць запоўнена',
     },
 
+    fillAllFields: {
+      en: 'Please, fill out all fields',
+      ru: 'Заполните все поля',
+      bel: 'Запоўніце ўсе палі',
+    },
+
     income: {
       title: {
         ru: 'Новый источник дохода',

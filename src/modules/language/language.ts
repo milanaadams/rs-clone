@@ -13,18 +13,11 @@ export default class Language extends Abstract {
   }
 
   switchLanguage(langToSwitch: number): void {
-    /* if (this.language === this.locale[0]) {
-      [this.language] = [this.locale[1]];
-    } else {
-      [this.language] = [this.locale[0]];
-    } */
     this.language = this.locale[langToSwitch];
     this.createCustomEvent('changeLang');
   }
 
   loadLanguageSwitcher(): DocumentFragment {
-    /* if (this.language === this.locale[0]) return 'Switch to Russian';
-    return 'Switch to English'; */
     const fragment = document.createDocumentFragment();
     this.locale.forEach((lang, index) => {
       const langItem = create('span', 'header__dropdown-menu__language', lang.toUpperCase(), fragment);
