@@ -21,15 +21,7 @@ export default class DataModel extends Abstract {
     this.categories = data.categories;
     this.blocks = data.categories;
     this.userCategories = data.user.userCategories;
-    // this.moves = {};
-    // this.moves.list = data.user.moves.data.map((move) => {
-    //   const newMove = { ...move };
-    //   newMove.cat_from = this.userCategories.find((cat) => cat.id === move.cat_from);
-    //   newMove.cat_to = this.userCategories.find((cat) => cat.id === move.cat_to);
-    //   return newMove;
-    // });
     this.allMoves = data.user.allMoves;
-    // this.moves.offset = data.user.moves.offset;
   }
 
   getAllCagetoryByType(type: number): Array<t.UserCategory> {
@@ -61,17 +53,7 @@ export default class DataModel extends Abstract {
               this.categories = data.categories;
               this.blocks = data.categories;
               this.userCategories = data.user.userCategories;
-              // this.moves = {};
-              // this.moves.list = data.user.moves.data.map((move) => {
-              //   const newMove = { ...move };
-              //   newMove.cat_from = this.userCategories.find((cat) => cat.id === move.cat_from);
-              //   newMove.cat_to = this.userCategories.find((cat) => cat.id === move.cat_to);
-              //   return newMove;
-              // });
               this.allMoves = data.user.allMoves;
-              // this.moves.offset = data.user.moves.offset;
-
-              // console.log(this.allMoves);
             });
           }
         })

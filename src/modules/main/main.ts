@@ -84,7 +84,6 @@ export default class Main extends Abstract {
             this.loadLoginForm();
           } else {
             response.json().then((data) => {
-              // console.log(data);
               this.dataModel = new DataModel(data);
               this.userDashboard = new UserDashboard(this.lang, this.elements.mainInner,
                 this.elements.headerRight, this.dataModel);
