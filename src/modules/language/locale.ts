@@ -367,6 +367,12 @@ const locale: Dictionary<any> = {
       ru: 'Итого',
       bel: 'Усяго',
     },
+
+    noTrans: {
+      en: 'No transactions yet',
+      ru: 'Движения по счету отсутствуют',
+      bel: 'Рух па ліку адсутнічае ',
+    },
   },
 
   // automatic data load
