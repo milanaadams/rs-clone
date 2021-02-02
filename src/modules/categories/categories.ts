@@ -110,6 +110,11 @@ export default class Categories extends Abstract {
           iconBg.style.backgroundColor = '#c1c5c9';
           itemSum.style.color = '#0ac38e';
         }
+      } else if (item.type === 2) {
+        if (item.summa < 0) {
+          iconBg.style.backgroundColor = '#e53935';
+          itemSum.style.color = '#e53935';
+        }
       }
       categoryEdit.addEventListener('click', () => { this.updateCategory(item); });
       categoryDelete.addEventListener('click', () => { this.deleteCategory(item); });

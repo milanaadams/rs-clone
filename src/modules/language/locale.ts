@@ -77,9 +77,9 @@ const locale: Dictionary<any> = {
       bel: 'атрымана',
     },
     planAmount: {
-      ru: 'бюджет расходов',
+      ru: 'бюджет',
       en: 'budget',
-      bel: 'бюджэт выдаткаў',
+      bel: 'бюджэт',
     },
   },
 

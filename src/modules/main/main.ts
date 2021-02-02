@@ -84,7 +84,6 @@ export default class Main extends Abstract {
             this.loadLoginForm();
           } else {
             response.json().then((data) => {
-              // console.log(data);
               this.dataModel = new DataModel(data);
               this.userDashboard = new UserDashboard(this.lang, this.elements.mainInner,
                 this.elements.headerRight, this.dataModel);
@@ -98,10 +97,8 @@ export default class Main extends Abstract {
     }
 
     if (!this.userToken) {
-      this.elements.loader.remove();
       this.loadLoginForm();
       const langSwitcher = create('div', 'language-switcher', this.lang.loadLanguageSwitcher(), this.elements.headerRight);
-      langSwitcher.addEventListener('click', () => { this.lang.switchLanguage(0); });
     }
   }
 
