@@ -95,7 +95,7 @@ export default class Login extends Abstract {
       if (el.value === '') {
         const errorBlock = create('div', 'error');
         create('img', 'error-icon', null, errorBlock, ['src', './assets/input-error.png']);
-        create('span', 'error-text', 'This field should not be empty', errorBlock);
+        create('span', 'error-text', locale.loginForm.emptyField[this.lang], errorBlock);
         if (el.parentElement !== null) {
           const parent: HTMLElement = el.parentElement;
           parent.appendChild(errorBlock);
@@ -174,7 +174,7 @@ export default class Login extends Abstract {
 
   showRegisteredSuccessfullyMsg(): void {
     while (this.parent.children.length > 0) this.parent.children[0].remove();
-    create('div', 'registration-success', 'You have successfully registered!', this.parent);
+    create('div', 'registration-success', locale.loginForm.registerSuccess[this.lang], this.parent);
     setTimeout(() => {
       this.login = true;
       this.switchForm();
