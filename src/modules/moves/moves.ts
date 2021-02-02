@@ -36,7 +36,7 @@ export default class Moves extends Abstract {
     this.elements.container = create('div', 'moves-history', null, this.parent);
     this.elements.container.style.height = `${(<HTMLElement>document.querySelector('.dashboard__left')).offsetHeight}px`;
     if (Object.keys(this.dataModel.allMoves).length === 0) {
-      create('p', 'moves-history__no-moves', 'No transactions yet', this.elements.container);
+      create('p', 'moves-history__no-moves', locale.moves.noTrans[this.lang], this.elements.container);
     }
 
     Object.keys(this.dataModel.allMoves).forEach((item) => {
