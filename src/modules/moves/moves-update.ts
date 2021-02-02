@@ -107,14 +107,16 @@ export default class MovesUpdate extends Abstract {
             this.elements.loader.remove();
             this.elements.blackOut.remove();
           } else {
-            response.json().then(() => {
+            response.json().then((data) => {
+              this.createCustomEvent('updateUserCat', data.cat_from);
+              this.createCustomEvent('updateUserCat', data.cat_to);
               this.createCustomEvent('updateDataModel');
-            }).then(() => {
-              setTimeout(() => {
-                this.createCustomEvent('updateMovesBlock');
-                this.elements.loader.remove();
-                this.elements.blackOut.remove();
-              }, 3000);
+            // }).then(() => {
+            //   setTimeout(() => {
+            //     this.createCustomEvent('updateMovesBlock');
+            //     this.elements.loader.remove();
+            //     this.elements.blackOut.remove();
+            //   }, 3000);
             });
           }
         })
@@ -122,9 +124,13 @@ export default class MovesUpdate extends Abstract {
     }
   }
 
+  dataModelUpdated():void {
+    this.elements.loader.remove();
+    this.elements.blackOut.remove();
+    this.createCustomEvent('updateMovesBlock');
+  }
+
   catchEvent(eventName: string): void {
-    if (this.evtArr.indexOf(eventName) === -1) {
-      throw new Error('Wrong custom event name.');
-    }
+    if (eventName.match(/dataModelUpdated/)) this.dataModelUpdated();
   }
 }
