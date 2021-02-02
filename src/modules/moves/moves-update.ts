@@ -117,12 +117,6 @@ export default class MovesUpdate extends Abstract {
               this.createCustomEvent('updateUserCat', data.cat_from);
               this.createCustomEvent('updateUserCat', data.cat_to);
               this.createCustomEvent('updateDataModel');
-            // }).then(() => {
-            //   setTimeout(() => {
-            //     this.createCustomEvent('updateMovesBlock');
-            //     this.elements.loader.remove();
-            //     this.elements.blackOut.remove();
-            //   }, 3000);
             });
           }
         })
