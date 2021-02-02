@@ -191,4 +191,5 @@ export interface UserCatElem {
   summElem?: HTMLElement
   planElem?: HTMLElement
   icon?: HTMLElement
+  item: UserCategory
 }

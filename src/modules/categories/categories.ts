@@ -89,7 +89,7 @@ export default class Categories extends Abstract {
     });
     const blockCategories = create('div', 'block__categories', null, parent);
     currentUserCategories.forEach((item) => {
-      const itemCat: UserCatElem = { id: item.id, type: item.type };
+      const itemCat: UserCatElem = { id: item.id, type: item.type, item };
 
       const categoryItem = create('div', 'block__categories-item', null, blockCategories);
       const categoryEdit = create('i', 'material-icons block__categories-item-edit', 'edit', categoryItem);
@@ -195,18 +195,31 @@ export default class Categories extends Abstract {
 
     if (cat.summElem) {
       cat.summElem.innerHTML = `${parseFloat(userCatObj.summa.toString()).toLocaleString(this.lang)} ${locale.currency[this.lang]}`;
+      cat.item.summa = userCatObj.summa;
     }
     if (cat.planElem) {
       cat.planElem.innerHTML = `${parseFloat((userCatObj.plan || 0).toString()).toLocaleString(this.lang)} ${locale.currency[this.lang]}`;
+      cat.item.plan = userCatObj.plan;
     }
 
-    if (userCatObj.type === 3 && cat.summElem && cat.planElem && cat.icon) {
-      if (userCatObj.summa > userCatObj.plan) {
-        cat.icon.style.backgroundColor = '#e53935';
-        cat.summElem.style.color = '#e53935';
-      } else {
-        cat.icon.style.backgroundColor = '#c1c5c9';
-        cat.summElem.style.color = '#0ac38e';
+    if (cat.summElem && cat.planElem && cat.icon) {
+      if (userCatObj.type === 2) {
+        cat.icon.style.backgroundColor = '#fc0';
+        cat.summElem.style.color = '#f9a825';
+      }
+      if (userCatObj.type === 3) {
+        if (userCatObj.summa > userCatObj.plan) {
+          cat.icon.style.backgroundColor = '#e53935';
+          cat.summElem.style.color = '#e53935';
+        } else {
+          cat.icon.style.backgroundColor = '#c1c5c9';
+          cat.summElem.style.color = '#0ac38e';
+        }
+      } else if (userCatObj.type === 2) {
+        if (userCatObj.summa < 0) {
+          cat.icon.style.backgroundColor = '#e53935';
+          cat.summElem.style.color = '#e53935';
+        }
       }
     }
   }

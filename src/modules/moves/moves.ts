@@ -124,6 +124,9 @@ export default class Moves extends Abstract {
           } else {
             response.json().then((data) => {
               this.createCustomEvent('updateDataModel');
+              this.createCustomEvent('updateUserCat', data.cat_from);
+              this.createCustomEvent('updateUserCat', data.cat_to);
+
               const currentMoveInd = this.moves.findIndex((move) => move.info.id === data.move);
               this.moves.splice(currentMoveInd, 1);
             }).then(() => {
