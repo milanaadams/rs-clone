@@ -70,9 +70,10 @@ export default class MoneyMove extends Abstract {
     create('label', 'move-form__label', locale.move.labelComment[this.lang], this.elements.moveCommentBlock);
     this.elements.moveComment = create('input', 'move-form__input', null, this.elements.moveCommentBlock, ['type', 'text']);
 
-    this.elements.formBtn = create('div', 'move-form__btn', locale.move.submitBtn[this.lang], this.elements.form);
+    this.elements.formBtn = create('button', 'move-form__btn', locale.move.submitBtn[this.lang], this.elements.form);
 
     this.elements.formBtn.addEventListener('click', () => {
+      this.elements.formBtn.setAttribute('disabled', 'true');
       this.processForm();
     });
 
@@ -113,9 +114,11 @@ export default class MoneyMove extends Abstract {
       if ((<HTMLInputElement>el).value === '') {
         if (this.elements.errorBlock) this.elements.errorBlock.remove();
         this.elements.errorBlock = create('div', 'move-error');
-        create('span', 'move-error__text', 'This field should not be empty', this.elements.errorBlock);
+        create('span', 'move-error__text', locale.addNewSource.noEmptyFields[this.lang], this.elements.errorBlock);
         if (el.parentElement) el.parentElement.appendChild(this.elements.errorBlock);
-        if (el.parentElement) el.parentElement.addEventListener('click', () => { this.elements.errorBlock.remove(); });
+        if (el.parentElement) el.parentElement.addEventListener('click', () => { 
+          this.elements.errorBlock.remove(); this.elements.formBtn.removeAttribute('disabled');
+        });
       }
     });
     if (formFields.some((el) => (<HTMLInputElement>el).value === '')) return;

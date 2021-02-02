@@ -82,7 +82,7 @@ export default class Moves extends Abstract {
         this.moves.push(currentMove);
 
         categoryEdit.addEventListener('click', () => { this.popUp = new MovesUpdate(this.lang, move /* , this.moves */); });
-        categoryDelete.addEventListener('click', () => { this.deleteCategory(move); });
+        categoryDelete.addEventListener('click', () => { this.deleteCategory(move); categoryDelete.setAttribute('disabled', 'true'); });
       });
       const dayBlockTotal = create('li', 'moves-history__day-item moves-history__total', null, dayBlockList);
       const dayBlockTotalAmount = create('div', 'moves-history__total-amount', null, dayBlockTotal);
@@ -132,8 +132,8 @@ export default class Moves extends Abstract {
             }).then(() => {
               setTimeout(() => {
                 this.createCustomEvent('updateMovesBlock');
-                this.elements.loader.remove();
-                this.elements.blackOut.remove();
+                //this.elements.loader.remove();
+                //this.elements.blackOut.remove();
               }, 3000);
             });
           }

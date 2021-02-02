@@ -50,9 +50,10 @@ export default class MovesUpdate extends Abstract {
     this.elements.moveComment = create('input', 'move-form__input', null, this.elements.moveCommentBlock, ['type', 'text']);
     (<HTMLInputElement> this.elements.moveComment).value = this.move.comment;
 
-    this.elements.formBtn = create('div', 'move-form__btn', locale.move.submitBtn[this.lang], this.elements.form);
+    this.elements.formBtn = create('button', 'move-form__btn', locale.move.submitBtn[this.lang], this.elements.form);
 
     this.elements.formBtn.addEventListener('click', () => {
+      this.elements.formBtn.setAttribute('disabled', 'true');
       this.processForm();
     });
 
@@ -67,7 +68,12 @@ export default class MovesUpdate extends Abstract {
         this.elements.errorBlock = create('div', 'move-error');
         create('span', 'move-error__text', 'This field should not be empty', this.elements.errorBlock);
         if (el.parentElement) el.parentElement.appendChild(this.elements.errorBlock);
-        if (el.parentElement) el.parentElement.addEventListener('click', () => { this.elements.errorBlock.remove(); });
+        if (el.parentElement) {
+          el.parentElement.addEventListener('click', () => {
+            this.elements.errorBlock.remove();
+            this.elements.formBtn.removeAttribute('disabled');
+          });
+        }
       }
     });
     if (formFields.some((el) => (<HTMLInputElement>el).value === '')) return;
