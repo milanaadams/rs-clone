@@ -44,7 +44,7 @@ export default function create(el: string,
           element.setAttribute(attrName, '');
         } else if (attrName && attrName
           .toString()
-          .match(/value|href|target|style|type|for|id|placeholder|cols|rows|autocorrect|spellcheck|src|name/)) {
+          .match(/value|href|target|style|type|for|id|placeholder|cols|rows|autocorrect|spellcheck|src|name|width|height/)) {
           element.setAttribute(attrName, attrValue || '');
         } else if (attrName) {
           element.dataset[attrName] = attrValue;

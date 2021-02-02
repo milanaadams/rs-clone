@@ -74,6 +74,7 @@ export default class Chart extends Abstract {
 
     this.chartConfig = {
       responsive: true,
+      maintainAspectRatio: false,
       title: {
         display: true,
       },
@@ -119,7 +120,7 @@ export default class Chart extends Abstract {
 
     this.chartData = {};
     const canvasBox = create('div', 'canvasBox', null, blockBody);
-    this.elements.canvas = create('canvas', 'canvas', null, canvasBox, ['width', '200'], ['height', '70'], ['id', 'chart']);
+    this.elements.canvas = create('canvas', 'canvas', null, canvasBox, ['width', '200'], ['height', '300'], ['id', 'chart']);
     this.elements.ctx = (<HTMLCanvasElement> this.elements.canvas).getContext('2d');
     if (this.elements.ctx) {
       this.chart = new ChartJs(this.elements.ctx, {
@@ -269,7 +270,6 @@ export default class Chart extends Abstract {
     })
       .then((response) => {
         if (response.status !== 200) {
-          // ДА!!  to-do: тут так надо делать, если пдиет ответ, что ключ протух?
           this.createCustomEvent('logOut');
         } else {
           response.json().then((data) => {
