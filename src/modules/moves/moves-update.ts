@@ -85,6 +85,7 @@ export default class MovesUpdate extends Abstract {
     if (this.userToken) {
       this.elements.blackOut = create('div', 'blackout', null, document.querySelector('.moves-history'));
       this.elements.loader = create('div', 'loader', null, document.querySelector('.moves-history'));
+      if (this.popup) this.popup.closePopup();
       fetch(`${config.server}/api/moves/update`, {
         method: 'POST',
         headers: {
@@ -105,11 +106,9 @@ export default class MovesUpdate extends Abstract {
             this.createCustomEvent('logOut');
             this.elements.loader.remove();
             this.elements.blackOut.remove();
-            if (this.popup) this.popup.closePopup();
           } else {
             response.json().then(() => {
               this.createCustomEvent('updateDataModel');
-              if (this.popup) this.popup.closePopup();
             }).then(() => {
               setTimeout(() => {
                 this.createCustomEvent('updateMovesBlock');
