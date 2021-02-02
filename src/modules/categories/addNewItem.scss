@@ -87,6 +87,9 @@
       text-transform: uppercase;
       border: none;
       cursor: pointer;
+      &:focus{
+        outline: none;
+      }
       &--income{
         background-color: $income-bg-color;
         color: #fff;

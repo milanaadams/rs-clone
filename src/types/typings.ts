@@ -184,3 +184,12 @@ export interface IputInfoMove {
 }
 
 export type Content = string|number|null|boolean|HTMLElement|DocumentFragment;
+
+export interface UserCatElem {
+  id: number
+  type: number
+  summElem?: HTMLElement
+  planElem?: HTMLElement
+  icon?: HTMLElement
+  item: UserCategory
+}

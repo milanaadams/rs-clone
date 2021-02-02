@@ -78,16 +78,24 @@ export default class Login extends Abstract {
     if (this.login) {
       this.elements.form.addEventListener('submit', (evt: Event) => {
         evt.preventDefault();
+        this.elements.inputBtn.setAttribute('disabled', 'true');
         this.processForm(this.elements.inputEmail, this.elements.inputPass);
       });
     } else {
       this.elements.form.addEventListener('submit', (evt: Event) => {
         evt.preventDefault();
+        this.elements.inputBtn.setAttribute('disabled', 'true');
         this.processForm(this.elements.inputEmail, this.elements.inputPass, this.elements.inputName);
       });
     }
-    this.elements.inputEmail.addEventListener('focus', (evt: Event) => { this.removeErrorMsg(<HTMLElement> evt.target); });
-    this.elements.inputPass.addEventListener('focus', (evt: Event) => { this.removeErrorMsg(<HTMLElement> evt.target); });
+    this.elements.inputEmail.addEventListener('focus', (evt: Event) => {
+      this.removeErrorMsg(<HTMLElement> evt.target);
+      this.elements.inputBtn.removeAttribute('disabled');
+    });
+    this.elements.inputPass.addEventListener('focus', (evt: Event) => {
+      this.removeErrorMsg(<HTMLElement> evt.target);
+      this.elements.inputBtn.removeAttribute('disabled');
+    });
   }
 
   processForm(...args: Array<HTMLInputElement>): void {
