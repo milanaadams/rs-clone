@@ -11,5 +11,6 @@ export default class MovesUpdate extends Abstract {
     loadMoveUpdateForm(): void;
     processForm(): void;
     updateMoneyMove(transactionDate: string, amount: number, userComment: string): void;
+    dataModelUpdated(): void;
     catchEvent(eventName: string): void;
 }
