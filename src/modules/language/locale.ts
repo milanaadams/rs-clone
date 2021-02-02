@@ -33,6 +33,16 @@ const locale: Dictionary<any> = {
       ru: 'Зарегистрироваться',
       bel: 'Зарэгістравацца',
     },
+    emptyField: {
+      en: 'This field should not be empty',
+      ru: 'Поле должно быть заполнено',
+      bel: 'Поле павінна быць запоўнена',
+    },
+    registerSuccess: {
+      en: 'You have successfully registered!',
+      ru: 'Вы успешно зарегистрировались!',
+      bel: 'Вы паспяхова зарэгістраваліся!',
+    }
   },
   // register form
   register: {
