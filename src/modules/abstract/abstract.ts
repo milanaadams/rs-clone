@@ -4,7 +4,9 @@ export default class Abstract {
   evtArr: string[];
 
   constructor() {
-    this.evtArr = ['userLoggedIn', 'logOut', 'changeLang', 'removeIconBoard', 'updateDataModel', 'updateMovesBlock'];
+    this.evtArr = ['userLoggedIn', 'logOut', 'changeLang', 'removeIconBoard',
+      'updateDataModel', 'updateMovesBlock', 'dataModelUpdated',
+      'updateUserCat'];
 
     this.evtArr.forEach((evtName) => {
       document.addEventListener(evtName, (evt) => this.catchEvent(evtName, (<CustomEvent>evt).detail));

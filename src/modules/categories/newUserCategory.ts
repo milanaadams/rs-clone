@@ -43,7 +43,7 @@ export default class NewUserCategory extends Abstract {
     this.elements.newItemNameInput = create('input', 'add-item__form-name', null, this.elements.newItemName);
     this.elements.newItemAmount = create('div', 'add-item__form-item', null, this.elements.addForm);
     this.elements.newItemAmountInput = create('input', 'add-item__form-amount', null, this.elements.newItemAmount, ['type', 'number']);
-    this.elements.formSubmit = create('div', 'add-item__form-submit', locale.addBtn[this.lang], this.elements.addForm);
+    this.elements.formSubmit = create('button', 'add-item__form-submit', locale.addBtn[this.lang], this.elements.addForm);
 
     this.elements.iconBtnImg = create('i', 'material-icons block__categories-icon', 'home', this.elements.iconBtn);
     this.elements.iconBtn.addEventListener('click', () => { this.selectIcon(); });
@@ -109,7 +109,10 @@ export default class NewUserCategory extends Abstract {
       this.elements.formSubmit.textContent = locale.updateBtn[this.lang];
     }
 
-    this.elements.formSubmit.addEventListener('click', () => { this.processForm(); });
+    this.elements.formSubmit.addEventListener('click', () => { 
+      this.elements.formSubmit.setAttribute('disabled', 'true');
+      this.processForm();
+    });
 
     this.addCatPopup = new Popup(document.body, fragment);
   }
@@ -123,7 +126,10 @@ export default class NewUserCategory extends Abstract {
         create('span', 'error-text', locale.addNewSource.noEmptyFields[this.lang], this.elements.errorBlock);
         if (el.parentElement) {
           el.parentElement.appendChild(this.elements.errorBlock);
-          el.parentElement.addEventListener('click', () => { this.elements.errorBlock.remove(); });
+          el.parentElement.addEventListener('click', () => {
+            this.elements.errorBlock.remove();
+            this.elements.formSubmit.removeAttribute('disabled');
+          });
         }
       }
     });

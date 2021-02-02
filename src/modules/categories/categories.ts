@@ -9,7 +9,7 @@ import DataModel from '../data-model/dataModel';
 // ts
 import {
   Dictionary, Category, UserToken,
-  UserCategory,
+  UserCategory, UserCatElem,
 } from '../../types/typings';
 
 function getCurrentMonth(lang: string): string {
@@ -27,6 +27,7 @@ export default class Categories extends Abstract {
   userToken?: UserToken;
   popup?: MoneyMove;
   popUp?: NewUserCategory;
+  catList: Array<UserCatElem>;
 
   constructor(lang: string, parent: HTMLElement, dataModel: DataModel) {
     super();
@@ -36,6 +37,7 @@ export default class Categories extends Abstract {
     this.received = 0;
     this.budget = 0;
     this.lang = lang;
+    this.catList = [];
     this.loadBlocks();
   }
 
@@ -87,6 +89,8 @@ export default class Categories extends Abstract {
     });
     const blockCategories = create('div', 'block__categories', null, parent);
     currentUserCategories.forEach((item) => {
+      const itemCat: UserCatElem = { id: item.id, type: item.type, item };
+
       const categoryItem = create('div', 'block__categories-item', null, blockCategories);
       const categoryEdit = create('i', 'material-icons block__categories-item-edit', 'edit', categoryItem);
       const categoryDelete = create('i', 'material-icons block__categories-item-edit block__categories-item-delete',
@@ -97,7 +101,14 @@ export default class Categories extends Abstract {
       const itemAmountInfo = create('div', 'block__categories-amount', null, categoryItem);
       const itemSum = create('p', 'block__categories-amount-actual',
         `${parseFloat(item.summa.toString()).toLocaleString(this.lang)} ${locale.currency[this.lang]}`, itemAmountInfo);
-      if (currentCat.allowPlan) create('span', 'block__subtitle block__subtitle--centered', item.plan || 0, itemAmountInfo);
+
+      itemCat.summElem = itemSum;
+
+      if (currentCat.allowPlan) {
+        itemCat.planElem = create('span', 'block__subtitle block__subtitle--centered',
+          item.plan || 0, itemAmountInfo);
+      }
+
       if (item.type === 2) {
         iconBg.style.backgroundColor = '#fc0';
         itemSum.style.color = '#f9a825';
@@ -119,6 +130,9 @@ export default class Categories extends Abstract {
       categoryEdit.addEventListener('click', () => { this.updateCategory(item); });
       categoryDelete.addEventListener('click', () => { this.deleteCategory(item); });
       iconBg.addEventListener('click', () => { this.popup = new MoneyMove(this.lang, item, this.dataModel); });
+
+      itemCat.icon = iconBg;
+      this.catList.push(itemCat);
     });
     const categoryItemAdd = create('div', 'block__categories-item block__categories-item--add', null, blockCategories);
     create('div', 'block__categories-img block__categories-img--add',
@@ -175,9 +189,42 @@ export default class Categories extends Abstract {
     }
   }
 
-  catchEvent(eventName: string): void {
-    if (this.evtArr.indexOf(eventName) === -1) {
-      throw new Error('Wrong custom event name.');
+  updateUserCat(userCatObj: UserCategory):void {
+    const cat: UserCatElem|undefined = this.catList.find((el) => el.id === userCatObj.id);
+    if (!cat) return;
+
+    if (cat.summElem) {
+      cat.summElem.innerHTML = `${parseFloat(userCatObj.summa.toString()).toLocaleString(this.lang)} ${locale.currency[this.lang]}`;
+      cat.item.summa = userCatObj.summa;
     }
+    if (cat.planElem) {
+      cat.planElem.innerHTML = `${parseFloat((userCatObj.plan || 0).toString()).toLocaleString(this.lang)} ${locale.currency[this.lang]}`;
+      cat.item.plan = userCatObj.plan;
+    }
+
+    if (cat.summElem && cat.planElem && cat.icon) {
+      if (userCatObj.type === 2) {
+        cat.icon.style.backgroundColor = '#fc0';
+        cat.summElem.style.color = '#f9a825';
+      }
+      if (userCatObj.type === 3) {
+        if (userCatObj.summa > userCatObj.plan) {
+          cat.icon.style.backgroundColor = '#e53935';
+          cat.summElem.style.color = '#e53935';
+        } else {
+          cat.icon.style.backgroundColor = '#c1c5c9';
+          cat.summElem.style.color = '#0ac38e';
+        }
+      } else if (userCatObj.type === 2) {
+        if (userCatObj.summa < 0) {
+          cat.icon.style.backgroundColor = '#e53935';
+          cat.summElem.style.color = '#e53935';
+        }
+      }
+    }
+  }
+
+  catchEvent(eventName: string, detail: any): void {
+    if (eventName.match(/updateUserCat/)) this.updateUserCat(detail);
   }
 }

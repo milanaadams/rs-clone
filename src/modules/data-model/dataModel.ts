@@ -54,6 +54,8 @@ export default class DataModel extends Abstract {
               this.blocks = data.categories;
               this.userCategories = data.user.userCategories;
               this.allMoves = data.user.allMoves;
+
+              this.createCustomEvent('dataModelUpdated');
             });
           }
         })
