@@ -132,8 +132,6 @@ export default class Moves extends Abstract {
             }).then(() => {
               setTimeout(() => {
                 this.createCustomEvent('updateMovesBlock');
-                //this.elements.loader.remove();
-                //this.elements.blackOut.remove();
               }, 3000);
             });
           }

@@ -123,7 +123,7 @@ export default class NewUserCategory extends Abstract {
       if ((<HTMLInputElement>el).value === '') {
         if (this.elements.errorBlock) this.elements.errorBlock.remove();
         this.elements.errorBlock = create('div', 'error error--add');
-        create('span', 'error-text', locale.addNewSource.noEmptyFields[this.lang], this.elements.errorBlock);
+        create('span', 'error-text add-item__error-text', locale.addNewSource.fillAllFields[this.lang], this.elements.errorBlock);
         if (el.parentElement) {
           el.parentElement.appendChild(this.elements.errorBlock);
           el.parentElement.addEventListener('click', () => {
